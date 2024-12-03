@@ -1,19 +1,20 @@
 package com.example.library_catalog_system;
 
+import java.util.ArrayList;
+import java.util.List;
 
-public class Authors {
+public class Author {
     private String name, surname, email, phone;
-    static int numOfBooks = 0;
-    Books books;
+    private List<Book> books;
 
-    public Authors(String name, String surname, String email, String phone, Books books) {
+    public Author(String name, String surname, String email, String phone) {
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.phone = phone;
-        this.books = books;
-        ++numOfBooks;
+        this.books = new ArrayList<>();
     }
+
     public String getName() {
         return name;
     }
@@ -39,13 +40,24 @@ public class Authors {
         this.phone = phone;
     }
 
+    public List<Book> getBooks() {
+        return books;
+    }
+    public void addBook(Book book) {
+        this.books.add(book);
+    }
+
     public void display_author_info() {
-        System.out.println("Display Author : " + getName() + " Information");
+        System.out.println("Display Author: " + getName() + " Information");
         System.out.println(" ================================================================");
         System.out.println("Name: " + getName());
         System.out.println("Surname: " + getSurname());
         System.out.println("Email: " + getEmail());
         System.out.println("Phone Number: " + getPhone());
-        System.out.println("Number of Books: " + numOfBooks);
+        System.out.println("Number of Books: " + books.size());
+        System.out.println("Books: ");
+        for (Book book : books) {
+            System.out.println(" - " + book.getTitle());
+        }
     }
 }

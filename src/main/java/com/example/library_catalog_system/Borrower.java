@@ -1,9 +1,14 @@
 package com.example.library_catalog_system;
 
-public class Borrowers extends Customers {
+import java.util.ArrayList;
+import java.util.List;
+
+public class Borrower extends User {
     private static int borrowerId = 0;
-    public Borrowers(String name, String address, String phone, String email, String gender, String username, String password, Orders order) {
-        super(name, address, phone, email, gender, username, password, order);
+    protected List<Order> orders;
+    public Borrower(String name, String address, String phone, String email, String gender, String username, String password) {
+        super(name, address, phone, email, gender, username, password);
+        this.orders = new ArrayList<Order>();
         ++borrowerId;
     }
     public int getBorrowerId() {
@@ -17,7 +22,6 @@ public class Borrowers extends Customers {
         System.out.println("Gender: " + getGender());
         System.out.println("Address: " + getAddress());
         System.out.println("Phone Number: " + getPhone());
-        System.out.println("Orders: " + getOrder());
         System.out.println("Borrower ID: " + getBorrowerId());
     }
 }

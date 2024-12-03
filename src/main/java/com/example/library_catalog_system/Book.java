@@ -1,12 +1,12 @@
 package com.example.library_catalog_system;
 
-public class Books {
+public class Book {
     private static int BookId = 0;
     private int price, publication_year;
     private String title;
     private boolean status;
-    Authors author;
-    public Books(String title, int price, int publication_year, boolean status, Authors author) {
+    protected Author author;
+    public Book(String title, int price, int publication_year, boolean status, Author author) {
         this.title = title;
         this.price = price;
         this.publication_year = publication_year;
@@ -39,8 +39,11 @@ public class Books {
     public void setStatus(boolean status) {
         this.status = status;
     }
-    public Authors getAuthor() {
+    public Author getAuthor() {
         return author;
+    }
+    public void setAuthor(Author author) {
+        this.author = author;
     }
 
 }
