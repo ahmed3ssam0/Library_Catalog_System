@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Order {
-    private static int orderId = 0;
+    private static int nextOrderId = 0;
+    private final int orderId;
     List<Book> books;
     private int price, quantity;
     public Order(Book book, int price, int quantity) {
         this.books = new ArrayList<>();
         this.price = price;
         this.quantity = quantity;
-        List<Book> books1 = new ArrayList<>();
-        ++orderId;
+        orderId = ++nextOrderId;
     }
 
     public int getOrderId() {

@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Borrower extends User {
-    private static int borrowerId = 0;
+    private static int nextBorrowerId = 0;
+    private final int borrowerId;
     protected List<Order> orders;
     public Borrower(String name, String address, String phone, String email, String gender, String username, String password) {
         super(name, address, phone, email, gender, username, password);
-        this.orders = new ArrayList<Order>();
-        ++borrowerId;
+        this.orders = new ArrayList<>();
+        borrowerId = ++nextBorrowerId;
     }
     public int getBorrowerId() {
         return borrowerId;

@@ -1,72 +1,106 @@
 package com.example.library_catalog_system;
 
 public class Book {
-    private static int BookId = 0, numOfCopies = 0;
-    private int price;
-    private int publication_year;
-    private final int numOfPages;
+    private static int nextBookId = 1;
+    private final int bookId, numOfPages;
     private String title;
-    protected Author author;
-    boolean found = false;
-    public Book(String title, int numOfPages, int price, int publication_year, Author author) {
+    private int price, publicationYear, numOfCopies;
+    private Author author;
+
+    public Book(String title, int numOfPages, int price, int publicationYear, Author author) {
+        if (title == null || title.isEmpty() || author == null) {
+            throw new IllegalArgumentException("Title and Author cannot be null or empty");
+        }
+
+        this.bookId = nextBookId++;
         this.title = title;
-        this.price = price;
-        this.publication_year = publication_year;
         this.numOfPages = numOfPages;
+        this.price = price;
+        this.publicationYear = publicationYear;
         this.author = author;
-        for (int i = 0; i < Library.getBooks().size(); i++) {
-            if (Library.getBooks().get(i).getTitle().equals(title) && Library.getBooks().get(i).getAuthor().getName().equals(author.getName())) {
-                found = true;
-                numOfCopies++;
-            }
-        }
-        if (!found) {
-            ++BookId;
-        }
+        this.numOfCopies = 1;
+
+        author.addBook(this);
     }
 
     public int getBookId() {
-        return BookId;
+        return bookId;
     }
+
     public String getTitle() {
         return title;
     }
+
     public void setTitle(String title) {
+        if (title == null || title.isEmpty()) {
+            throw new IllegalArgumentException("Title cannot be null or empty");
+        }
         this.title = title;
     }
+
     public int getPrice() {
         return price;
     }
+
     public void setPrice(int price) {
+        if (price < 0) {
+            throw new IllegalArgumentException("Price cannot be negative");
+        }
         this.price = price;
     }
-    public int getPublication_year() {
-        return publication_year;
+
+    public int getPublicationYear() {
+        return publicationYear;
     }
-    public void setPublication_year(int publication_year) {
-        this.publication_year = publication_year;
+
+    public void setPublicationYear(int publicationYear) {
+        if (publicationYear <= 0) {
+            throw new IllegalArgumentException("Invalid publication year");
+        }
+        this.publicationYear = publicationYear;
     }
+
+    public int getNumOfPages() {
+        return numOfPages;
+    }
+
     public Author getAuthor() {
         return author;
     }
+
     public void setAuthor(Author author) {
+        if (author == null) {
+            throw new IllegalArgumentException("Author cannot be null");
+        }
         this.author = author;
+        author.addBook(this);
     }
 
-    public void display_book_info() {
-        System.out.println("Display Book : " + getTitle() + " Information");
-        System.out.println(" ================================================================");
-        System.out.println("Book ID: " + getBookId());
-        System.out.println("Title: " + getTitle());
-        System.out.println("Number of Pages: " + numOfPages);
-        System.out.println("Publication Year: " + getPublication_year());
-        System.out.println("Price: " + getPrice());
-        System.out.println("Author: " + getAuthor().getName());
+    public int getNumOfCopies() {
+        return numOfCopies;
+    }
+
+    public void incrementCopies() {
+        numOfCopies++;
+    }
+
+    public void decrementCopies() {
         if (numOfCopies > 0) {
-            System.out.println("Status: Available - " + numOfCopies + " copies");
+            numOfCopies--;
         } else {
-            System.out.println("Status: Not available - " + numOfCopies + " copies");
+            System.out.println("No copies left to remove");
         }
     }
 
+    public void displayBookInfo() {
+        System.out.println("\nBook " + getTitle() + " Information");
+        System.out.println("================================================================");
+        System.out.println("Book ID: " + getBookId());
+        System.out.println("Title: " + getTitle());
+        System.out.println("Number of Pages: " + getNumOfPages());
+        System.out.println("Publication Year: " + getPublicationYear());
+        System.out.println("Price: $" + getPrice());
+        System.out.println("Author: " + getAuthor().getName());
+        System.out.println("Status: " + (numOfCopies > 0 ? "Available - " + numOfCopies + " copies" : "Not available"));
+    }
 }

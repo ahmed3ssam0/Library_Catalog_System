@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Customer extends User{
-    private static int customerId = 0;
+    private static int nextCustomerId = 0;
+    private final int customerId;
     List<Order> orders;
     public Customer(String name, String address, String phone, String email, String gender, String username, String password) {
         super(name, address, phone, email, gender, username, password);
         this.orders = new ArrayList<>();
-        ++customerId;
+        customerId = ++nextCustomerId;
     }
 
     public int getCustomerId() {
