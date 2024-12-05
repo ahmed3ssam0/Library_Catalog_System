@@ -6,21 +6,26 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Hello!");
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("home.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
+
         stage.setScene(scene);
+        stage.setTitle("Library Catalog System");
+        stage.setWidth(stage.getWidth());
+        stage.setHeight(stage.getHeight());
         stage.show();
     }
 
     public static void main(String[] args) {
-//        launch();
+        launch();
 //        Library library = new Library("H&M", "Cairo");
-//        Author author = new Author("Ahmed", "Essam", "ahmed@gmail.com", "01", "male");
+//        Author author = new Author("Ahmed", "Essam", "ahmed@gmail.com", "01");
 //        library.setAuthors(author);
 //
 //        Book book1 = new Book("Math", 300, 200, 2005, author);
@@ -34,6 +39,6 @@ public class Main extends Application {
 //        }
 //        author.display_author_info();
 //        library.displayLibraryInfo();
-//        Admin admin = new Admin("ahmed","cairo","01","a@a.com","male", "admin", "admin");
+//        Admin admin = new Admin("ahmed","cairo","01","a@a.com", "admin", "admin");
     }
 }

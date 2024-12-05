@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Label?>
+<VBox styleClass="body" alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.library_catalog_system.Controller" stylesheets="@style.css">
+
+    <Text text="Welcome Back!" layoutX="50" layoutY="50" styleClass="login-text"/>
+
+    <TextField fx:id="usernameField" focusTraversable="false" promptText="Username"/>
+    <PasswordField fx:id="passwordField" focusTraversable="false" promptText="Password"/>
+    <Label fx:id="messageLabel" alignment="CENTER" contentDisplay="CENTER"/>
+
+    <HBox fx:id="box" spacing="50" alignment="CENTER">
+        <Button focusTraversable="false" text="Login" fx:id="login" onAction="#handleLogin"/>
+        <Button focusTraversable="false" text="Back" fx:id="back" onAction="#backToHome"/>
+    </HBox>
+
+</VBox>

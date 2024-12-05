@@ -4,15 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Author {
-    private String name, surname, email, phone, gender;
+    private String name, surname, email, phone;
     private static List<Book> books;
 
-    public Author(String name, String surname, String email, String phone, String gender) {
+    public Author(String name, String surname, String email, String phone) {
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.phone = phone;
-        this.gender = gender;
         this.books = new ArrayList<>();
     }
 
@@ -40,12 +39,6 @@ public class Author {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-    public String getGender() {
-        return gender;
-    }
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
 
     public static List<Book> getBooks() {
         return books;
@@ -71,7 +64,6 @@ public class Author {
         System.out.println("Surname: " + getSurname());
         System.out.println("Email: " + getEmail());
         System.out.println("Phone Number: " + getPhone());
-        System.out.println("Gender: " + getGender());
         System.out.println("Number of Books: " + books.size());
         System.out.println("Books: ");
         for (Book book : books) {

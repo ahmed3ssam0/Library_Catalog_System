@@ -7,8 +7,8 @@ public class Customer extends User{
     private static int nextCustomerId = 0;
     private final int customerId;
     List<Order> orders;
-    public Customer(String name, String address, String phone, String email, String gender, String username, String password) {
-        super(name, address, phone, email, gender, username, password);
+    public Customer(String name, String address, String phone, String email, String username, String password) {
+        super(name, address, phone, email, username, password);
         this.orders = new ArrayList<>();
         customerId = ++nextCustomerId;
     }
@@ -30,7 +30,6 @@ public class Customer extends User{
         System.out.println("Customer ID: " + getCustomerId());
         System.out.println("Name: " + getName());
         System.out.println("Email: " + getEmail());
-        System.out.println("Gender: " + getGender());
         System.out.println("Address: " + getAddress());
         System.out.println("Phone Number: " + getPhone());
         System.out.println("Orders: ");

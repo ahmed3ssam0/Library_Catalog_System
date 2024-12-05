@@ -1,13 +1,12 @@
 package com.example.library_catalog_system;
 
 public abstract class User {
-    private String name, address, phone, email, gender, username, password;
-    public User(String name, String address, String phone, String email, String gender, String username, String password) {
+    private String name, address, phone, email, username, password;
+    public User(String name, String address, String phone, String email, String username, String password) {
         this.name = name;
         this.address = address;
         this.phone = phone;
         this.email = email;
-        this.gender = gender;
         this.username = username;
         this.password = password;
     }
@@ -35,12 +34,6 @@ public abstract class User {
     }
     public void setEmail(String email) {
         this.email = email;
-    }
-    public String getGender() {
-        return gender;
-    }
-    public void setGender(String gender) {
-        this.gender = gender;
     }
     public String getUsername() {
         return username;

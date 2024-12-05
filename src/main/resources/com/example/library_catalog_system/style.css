@@ -1,0 +1,36 @@
+.body {
+    -fx-background-image: url("images/pexels-technobulka-2908984.jpg");
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+    -fx-background-size: cover;
+}
+
+.welcome-text {
+    fx-font-family: "Gill Sans", sans-serif;
+    -fx-font-size: 40px;
+    -fx-font-weight: bold;
+    -fx-fill: #eee;
+}
+
+Button {
+    -fx-cursor: hand;
+    -fx-background-color: #fff;
+    -fx-padding: 5px 50px;
+    -fx-font-size: 14px;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+.login-text, .register-text {
+    fx-font-family: "Gill Sans", sans-serif;
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-fill: #eee;
+}
+
+#usernameField, #passwordField, #R_usernameField, #R_passwordField, #R_name, #R_address, #R_phone, #R_email {
+    -fx-max-width: 500;
+    -fx-pref-height: 30;
+    -fx-font-size: 14px;
+    -fx-border-radius: 10px;
+}

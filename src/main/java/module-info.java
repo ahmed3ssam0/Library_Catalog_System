@@ -10,6 +10,7 @@ module com.example.library_catalog_system {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires java.desktop;
 
     opens com.example.library_catalog_system to javafx.fxml;
     exports com.example.library_catalog_system;
