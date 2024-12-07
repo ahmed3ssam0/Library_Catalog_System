@@ -7,7 +7,7 @@ public class Book {
     private int price, publicationYear, numOfCopies;
     private Author author;
 
-    public Book(String title, int numOfPages, int price, int publicationYear, Author author) {
+    public Book(String title, int numOfPages, int numOfCopies, int price, int publicationYear, Author author) {
         if (title == null || title.isEmpty() || author == null) {
             throw new IllegalArgumentException("Title and Author cannot be null or empty");
         }
@@ -15,11 +15,10 @@ public class Book {
         this.bookId = nextBookId++;
         this.title = title;
         this.numOfPages = numOfPages;
+        this.numOfCopies = numOfCopies;
         this.price = price;
         this.publicationYear = publicationYear;
         this.author = author;
-        this.numOfCopies = 1;
-
         author.addBook(this);
     }
 
