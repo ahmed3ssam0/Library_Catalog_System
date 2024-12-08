@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Customer extends User{
     private static int nextCustomerId = 0;
-    private final int customerId;
+    private int customerId;
     List<Order> orders;
     public Customer(String name, String address, String phone, String email, String username, String password) {
         super(name, address, phone, email, username, password);
@@ -16,6 +16,9 @@ public class Customer extends User{
     public int getCustomerId() {
         return customerId;
     }
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
+    }
 
     public List<Order> getOrders() {
         return orders;
@@ -23,6 +26,8 @@ public class Customer extends User{
     public void setOrders(Order order) {
         orders.add(order);
     }
+
+
 
     public void display_info() {
         System.out.println("Display Customer : " + getUsername() + " Information");
