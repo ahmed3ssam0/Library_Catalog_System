@@ -1,5 +1,6 @@
 package com.example.library_catalog_system;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,11 +9,15 @@ public class Library {
     private static int numOfSections, numOfBooks;
     private static List<Book> books;
     private static List<Author> authors;
+    private static List<Customer> customers;
+    private static List<Borrower>borrowers;
     public Library(String name, String address) {
         this.name = name;
         this.address = address;
         books = new ArrayList<>();
         authors = new ArrayList<>();
+        customers = new ArrayList<>();
+        borrowers = new ArrayList<>();
     }
     public String getName() {
         return name;
@@ -29,6 +34,15 @@ public class Library {
     public static List<Book> getBooks() {
         return books;
     }
+
+    public static List<Borrower> getBorrowers() {
+        return borrowers;
+    }
+
+    public static List<Customer> getCustomers() {
+        return customers;
+    }
+
     public void setBooks(Book book) {
         boolean found = false;
         for (int i = 0; i < Library.getBooks().size(); i++) {
@@ -54,6 +68,25 @@ public class Library {
         }
         if (!found) {
             authors.add(author);
+        }
+    }
+    // Function Send Notifications
+    public void sendNotifications() {
+        LocalDate today = LocalDate.now();
+        System.out.println("Sending Notifications:");
+        for (Borrower borrower : borrowers) {
+            for (Transaction transaction : borrower.getTransactions()) {
+                // Reminder for items due today
+                if (transaction.getReturnDate().isEqual(today)) {
+                    System.out.println("Reminder: Book '" + transaction.getBook().getTitle() +
+                            "' is due today ");
+                }
+                // Notification for overdue items
+                else if (transaction.getReturnDate().isBefore(today)) {
+                    System.out.println("Overdue: Book '" + transaction.getBook().getTitle() +
+                            "' is overdue ");
+                }
+            }
         }
     }
 

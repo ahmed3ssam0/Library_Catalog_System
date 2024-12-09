@@ -7,7 +7,7 @@ import java.util.List;
 public class Borrower extends User {
     private static int nextBorrowerId = 0;
     private final int borrowerId;
-    protected List<Transaction> transactions;
+    public List<Transaction> transactions;
     public Borrower(String name, String address, String phone, String email, String username, String password) {
         super(name, address, phone, email, username, password);
         this.transactions = new ArrayList<>();
@@ -21,7 +21,13 @@ public class Borrower extends User {
     public List<Transaction> getTransactions() {
         return transactions;
     }
-
+    //  View Borrowing History
+    public void viewBorrowingHistory() {
+        System.out.println("Borrowing History for: " + this.getName());
+        for (Transaction transaction : this.getTransactions()) {
+            System.out.println(transaction);
+        }
+    }
 
     public void display_info() {
         System.out.println("Display Borrower : " + getUsername() + " Information");
