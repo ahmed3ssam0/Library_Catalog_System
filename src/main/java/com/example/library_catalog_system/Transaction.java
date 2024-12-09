@@ -56,6 +56,25 @@ public class Transaction {
     public LocalDate getReturnDate() {
         return returnDate;
     }
+    //Function Calculate Fine for overdue Returns
+    public double Calculate_Fines(double dailyFine){
+        LocalDate today =LocalDate.now();
+        if(this.returnDate.isBefore(today)){
+            int overdue_days = (int)(today.toEpochDay()-returnDate.toEpochDay());
+            return dailyFine * (double) overdue_days;
+        }
+        return 0.0;
+    }
+    //Function To Check availability of The Book Before Borrowing it
+    public void Check_availability(){
+        if(this.book.getNumOfCopies()>0){
+            System.out.println("There are "+this.book.getNumOfCopies()+" Copies of this book available");
+        }
+        else{
+            System.out.println("There are no Copies of this book available");
+        }
+
+    }
     // builtin function that displays all information about the class
     @Override
     public String toString() {
