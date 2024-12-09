@@ -1,11 +1,12 @@
-package com.example.library_catalog_system;
-
+import java.util.Scanner;
+import java.util.*;
 public class Book {
     private static int nextBookId = 1;
     private final int bookId, numOfPages;
     private String title;
-    private int price, publicationYear, numOfCopies;
+    public int price, publicationYear, numOfCopies;
     private Author author;
+
 
     public Book(String title, int numOfPages, int numOfCopies, int price, int publicationYear, Author author) {
         if (title == null || title.isEmpty() || author == null) {
@@ -25,10 +26,15 @@ public class Book {
     public int getBookId() {
         return bookId;
     }
-
     public String getTitle() {
         return title;
     }
+    public void setnumofcopies(int numOfCopies){
+        this.numOfCopies=numOfCopies;
+
+    }
+
+
 
     public void setTitle(String title) {
         if (title == null || title.isEmpty()) {
@@ -63,6 +69,7 @@ public class Book {
         return numOfPages;
     }
 
+
     public Author getAuthor() {
         return author;
     }
@@ -81,6 +88,10 @@ public class Book {
 
     public void incrementCopies() {
         numOfCopies++;
+    }
+    public void removebook(){
+        if (this.numOfCopies==0)
+            removebook();
     }
 
     public void decrementCopies() {
@@ -102,4 +113,21 @@ public class Book {
         System.out.println("Author: " + getAuthor().getName());
         System.out.println("Status: " + (numOfCopies > 0 ? "Available - " + numOfCopies + " copies" : "Not available"));
     }
+    public String toFileFormat() {
+        return bookId + "," + title + "," + numOfPages + "," + numOfCopies + "," + price + "," + publicationYear + "," + author.toFileFormat();
+    }
+
+    public static Book fromFileFormat(String line) {
+        String[] parts = line.split(",");
+        int bookId = Integer.parseInt(parts[0]);
+        String title = parts[1];
+        int numOfPages = Integer.parseInt(parts[2]);
+        int numOfCopies = Integer.parseInt(parts[3]);
+        int price = Integer.parseInt(parts[4]);
+        int publicationYear = Integer.parseInt(parts[5]);
+        Author author = Author.fromFileFormat(String.join(",", parts[6], parts[7], parts[8], parts[9]));
+        return new Book(title, numOfPages, numOfCopies, price, publicationYear, author);
+    }
+
 }
+

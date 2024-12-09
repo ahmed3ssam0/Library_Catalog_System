@@ -1,11 +1,11 @@
-package com.example.library_catalog_system;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class Author {
     private String name, surname, email, phone;
     private static List<Book> books;
+
+
 
     public Author(String name, String surname, String email, String phone) {
         this.name = name;
@@ -69,5 +69,13 @@ public class Author {
         for (Book book : books) {
             System.out.println(" - " + book.getTitle());
         }
+    }
+    public String toFileFormat() {
+        return name + "," + surname + "," + email + "," + phone;
+    }
+
+    public static Author fromFileFormat(String line) {
+        String[] parts = line.split(",");
+        return new Author(parts[0], parts[1], parts[2], parts[3]);
     }
 }

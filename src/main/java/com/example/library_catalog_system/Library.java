@@ -1,23 +1,35 @@
+
 package com.example.library_catalog_system;
 
-import java.time.LocalDate;
+import java.sql.SQLOutput;
+import java.util.*;
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.io.*;
 import java.util.List;
+import java.time.LocalDate;
+import java.util.*;
 
+import java.time.format.DateTimeFormatter;
 public class Library {
+
+    private final String FILE_NAME = "books.txt";
+
+
     private String name, address;
     private static int numOfSections, numOfBooks;
-    private static List<Book> books;
+    public static ArrayList<Book> books= new ArrayList<>();
     private static List<Author> authors;
     private static List<Customer> customers;
     private static List<Borrower>borrowers;
     public Library(String name, String address) {
         this.name = name;
         this.address = address;
-        books = new ArrayList<>();
-        authors = new ArrayList<>();
-        customers = new ArrayList<>();
-        borrowers = new ArrayList<>();
+
+    }
+    public Library(){
+        loadBooksFromFile();
+
     }
     public String getName() {
         return name;
@@ -70,7 +82,8 @@ public class Library {
             authors.add(author);
         }
     }
-    // Function Send Notifications
+
+
     public void sendNotifications() {
         LocalDate today = LocalDate.now();
         System.out.println("Sending Notifications:");
@@ -90,16 +103,124 @@ public class Library {
         }
     }
 
+
+    public void addbook(Book newbook) {
+        books.add(newbook);
+        save_books_to_file();
+        System.out.println("Book added successfully .");
+    }
+    public void updatebooks(int bookId) {
+        Scanner input = new Scanner(System.in);
+
+        for (Book book : books) {
+            if (book.getBookId() == bookId) {
+                System.out.println("Book is found.");
+                int mychoice;
+                do {
+                    System.out.println("Press 1 to update the price of the book.");
+                    System.out.println("Press 2 to update the number of copies of the book.");
+                    System.out.println("Press 3 to exit from updating process.");
+                    System.out.print("Enter your choice: ");
+                    mychoice = input.nextInt();
+
+                    switch (mychoice) {
+                        case 1:
+                            System.out.print("Enter the new price: ");
+                            int new_price = input.nextInt();
+                            book.setPrice(new_price);
+                            System.out.println("Price updated successfully.");
+                            break;
+
+                        case 2:
+                            System.out.print("Enter the new number of copies: ");
+                            int new_numofcopies = input.nextInt();
+                            book.numOfCopies = new_numofcopies;
+                            System.out.println("Number of copies updated successfully.");
+                            break;
+
+                        case 3:
+                            System.out.println("Exiting update menu.");
+                            break;
+
+                        default:
+                            System.out.println("Invalid choice. Please try again.");
+                    }
+                } while (mychoice != 3);
+                save_books_to_file();
+                return;
+            }
+        }
+
+        System.out.println("Book with ID " + bookId + " not found.");
+    }
+    public void removebook(int bookId) {
+        boolean found = false;
+        for (int i = 0; i < books.size(); i++) {
+            if (books.get(i).getBookId() == bookId) {
+                books.remove(i);
+                save_books_to_file();
+                System.out.println("Book with ID " + bookId + " removed successfully.");
+                found = true;
+                break;
+
+            }
+        }
+
+        if (!found) {
+            System.out.println("Book with ID " + bookId + " not found in the system.");
+        }
+    }
+    public void displayAvailableBooks() {
+        if (books.isEmpty()) {
+            System.out.println("No books available in the library.");
+        } else {
+            System.out.println("List of Available Books:");
+            for (Book book : books) {
+                System.out.println("ID: " + book.getBookId() + ", Title: " + book.getTitle() + ", Author: " + book.getAuthor().getName() + " " + book.getAuthor().getSurname() + ", Price: " + book.getPrice() +" , numofcopies:"+ book.getNumOfCopies());
+            }
+        }
+    }
+    public void displayTotalBooks() {
+        int totalBooks = 0;
+
+        for (Book book : books) {
+            totalBooks += book.getNumOfCopies();
+        }
+        System.out.println("Number of distinct book titles: " + books.size());
+        System.out.println("Total number of books in the library: " + totalBooks);
+    }
+    public void save_books_to_file(){
+
+        try (FileWriter writer = new FileWriter(FILE_NAME)) {
+            for (Book book : books) {
+                writer.write(book.toFileFormat() + "\n");
+            }
+        } catch (IOException e) {
+            System.out.println("Error saving books to file: " + e.getMessage());
+        }
+    }
+    public void loadBooksFromFile() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                Book book = Book.fromFileFormat(line);
+                books.add(book);
+            }
+        } catch (IOException e) {
+            System.out.println("Error loading books from file: " + e.getMessage());
+        }
+    }
     public void displayLibraryInfo() {
         System.out.println("\nLibrary Information");
         System.out.println("================================================================");
         System.out.println("Library Name: " + getName());
         System.out.println("Library Address: " + getAddress());
         int allCopies = 0;
-        for (Book book : getBooks()) {
+        for (Book book : Author.getBooks()) {
             allCopies += book.getNumOfCopies();
         }
         System.out.println("The Library has " + Library.getBooks().size() + " books and " + allCopies + " copies");
-        System.out.println("Number of Authors: " + Library.getAuthors().size());
+
     }
 }
+
