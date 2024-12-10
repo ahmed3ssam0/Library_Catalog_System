@@ -1,5 +1,6 @@
-import java.util.Scanner;
+package com.example.library_catalog_system;
 import java.util.*;
+
 public class Book {
     private static int nextBookId = 1;
     private final int bookId, numOfPages;
