@@ -9,28 +9,29 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 import static java.lang.Integer.parseInt;
-import static java.lang.String.valueOf;
 
 public class Controller {
     @FXML
-    private HBox box, gender;
+    private HBox box;
     @FXML
-    private Button login, register, back;
-    @FXML
-    private TextField usernameField, passwordField, R_usernameField, R_passwordField, R_name, R_address, R_phone, R_email;
+    private TextField usernameField, passwordField,
+            R_usernameField, R_passwordField, R_name, R_address, R_phone, R_email,
+            bookTitle, bookPages, bookPrice, bookYear, bookCopies,
+            authorName, authorSurname, authorPhone, authorEmail;
     @FXML
     private Labeled messageLabel, messageLabel1;
+
+    Library library = new Library("Library", "Cairo");
+    String fileName = "E:\\ahmed\\java\\Library_Catalog_System\\Library_Catalog_System\\files\\";
 
     private void switchScene(String fxmlFile, ActionEvent actionEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(fxmlFile));
@@ -85,7 +86,7 @@ public class Controller {
     private void handleLogin(ActionEvent actionEvent) throws IOException {
         String username = usernameField.getText();
         String password = passwordField.getText();
-        String fileName = "E:\\ahmed\\java\\Library_Catalog_System\\Library_Catalog_System\\files\\customers.txt";
+        fileName += "customers.txt";
         List<String> data = readData(fileName);
         String cusUser, cusPassword;
         if ("admin".equals(username) && "admin".equals(password)) {
@@ -123,7 +124,7 @@ public class Controller {
         String phone = R_phone.getText();
         String email = R_email.getText();
 
-        String fileName = "E:\\ahmed\\java\\Library_Catalog_System\\Library_Catalog_System\\files\\customers.txt";
+        fileName += "customers.txt";
         List<String> allData = readData(fileName);
 
         int cnt = 0, i1 = 0, i2 = 0, i3 = 0;
@@ -193,6 +194,28 @@ public class Controller {
         }
     }
 
+    @FXML
+    private void addBooks(ActionEvent actionEvent) throws IOException {
+        String authorname = authorName.getText();
+        String authorsurname = authorSurname.getText();
+        String authorphone = authorPhone.getText();
+        String authoremail = authorEmail.getText();
+        String booktitle = bookTitle.getText();
+        int bookpages = Integer.parseInt(bookPages.getText());
+        int bookprice = Integer.parseInt(bookPrice.getText());
+        int bookyear = Integer.parseInt(bookYear.getText());
+        int bookcopies = Integer.parseInt(bookCopies.getText());
+        Author author = new Author(authorname, authorsurname, authorphone, authoremail);
+        Book book = new Book(booktitle, bookpages, bookcopies, bookprice, bookyear, author);
+
+        try {
+            library.addbook(book);
+            adminBooks(actionEvent);
+        } catch (Exception e) {
+            messageLabel.setText("An error occurred. Please try again.");
+        }
+    }
+
 
     @FXML
     private void switchToLogin(ActionEvent actionEvent) throws IOException {
@@ -212,6 +235,11 @@ public class Controller {
     @FXML
     private void adminBooks(ActionEvent actionEvent) throws IOException {
         switchScene("admin_books.fxml", actionEvent);
+    }
+
+    @FXML
+    private void adminAddBook(ActionEvent actionEvent) throws IOException {
+        switchScene("admin_add_book.fxml", actionEvent);
     }
 
     @FXML

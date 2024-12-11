@@ -1,6 +1,6 @@
- package com.example.library_catalog_system;
-import java.util.Scanner;
+package com.example.library_catalog_system;
 import java.util.*;
+
 public class Book {
     private static int nextBookId = 1;
     private final int bookId, numOfPages;
@@ -108,7 +108,6 @@ public class Book {
         System.out.println("================================================================");
         System.out.println("Book ID: " + getBookId());
         System.out.println("Title: " + getTitle());
-        System.out.println("Number of available Copies : "+getNumOfCopies());
         System.out.println("Number of Pages: " + getNumOfPages());
         System.out.println("Publication Year: " + getPublicationYear());
         System.out.println("Price: $" + getPrice());

@@ -1,8 +1,6 @@
-
 package com.example.library_catalog_system;
 
-
-
+import java.util.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.*;
@@ -13,7 +11,7 @@ import java.util.*;
 import java.time.format.DateTimeFormatter;
 public class Library {
 
-    private final String FILE_NAME = "books.txt";
+    private final String FILE_NAME = "E:\\ahmed\\java\\Library_Catalog_System\\Library_Catalog_System\\files\\books.txt";
 
 
     private String name, address;
@@ -102,47 +100,7 @@ public class Library {
             }
         }
     }
-    //Function Recommend 4 Books If The  chosen book is not available
-    public void Recommend_books(){
-        ArrayList <Book>A = new ArrayList<>();
-        for(int i=2;i<6;i++){
-            A.add(books.get(i));
-        }
-        Collections.shuffle(A);
-        for (Book book:A) {
-            book.displayBookInfo();
-        }
-    }
-    //Function That Search for Specified Book By title and recommend some books if book not found
-    public void Search_book(String title){
-        boolean found = false;
-        for(Book book : books){
-            if (book.getTitle().equalsIgnoreCase(title)&&book.getNumOfCopies()>0){
-                book.displayBookInfo();
-                found=true;
-                break;
-            }
-        }
-        if(!found){
-            System.out.println("the book "+title+" is not available now , Here are some books you might like :\n ");
-            Recommend_books();
-        }
-    }
-    // OverLoading Method for Previous Method
-    public void Search_book(Author author){
-        boolean found = false;
-        for(Book book : books){
-            if (book.getAuthor().equals(author)&&book.getNumOfCopies()>0){
-                book.displayBookInfo();
-                found=true;
-                break;
-            }
-        }
-        if(!found){
-            System.out.println("the book you looking for is not available now , Here are some books you might like : ");
-            Recommend_books();
-        }
-    }
+
 
     public void addbook(Book newbook) {
         books.add(newbook);
