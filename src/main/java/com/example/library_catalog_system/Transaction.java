@@ -59,7 +59,7 @@ public class Transaction {
     //Function Calculate Fine for overdue Returns
     public double Calculate_Fines(double dailyFine){
         LocalDate today =LocalDate.now();
-        if(this.returnDate.isBefore(today)){
+        if(today.isAfter(this.returnDate)){
             int overdue_days = (int)(today.toEpochDay()-returnDate.toEpochDay());
             return dailyFine * (double) overdue_days;
         }
@@ -79,8 +79,7 @@ public class Transaction {
     @Override
     public String toString() {
         return "Transaction{" +
-                "book=" + book +
-                ", borrower=" + borrower +
+                "book=" + book.getTitle() +
                 ", borrowDate=" + borrowDate +
                 ", returnDate=" + returnDate +
                 '}';

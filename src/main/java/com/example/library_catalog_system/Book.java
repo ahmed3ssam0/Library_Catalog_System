@@ -1,3 +1,4 @@
+ package com.example.library_catalog_system;
 import java.util.Scanner;
 import java.util.*;
 public class Book {
@@ -107,6 +108,7 @@ public class Book {
         System.out.println("================================================================");
         System.out.println("Book ID: " + getBookId());
         System.out.println("Title: " + getTitle());
+        System.out.println("Number of available Copies : "+getNumOfCopies());
         System.out.println("Number of Pages: " + getNumOfPages());
         System.out.println("Publication Year: " + getPublicationYear());
         System.out.println("Price: $" + getPrice());

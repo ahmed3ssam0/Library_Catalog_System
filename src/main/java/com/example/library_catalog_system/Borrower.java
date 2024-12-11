@@ -23,11 +23,12 @@ public class Borrower extends User {
     }
     //  View Borrowing History
     public void viewBorrowingHistory() {
-        System.out.println("Borrowing History for: " + this.getName());
+        System.out.println("Borrowing History for you: " );
         for (Transaction transaction : this.getTransactions()) {
             System.out.println(transaction);
         }
     }
+
 
     public void display_info() {
         System.out.println("Display Borrower : " + getUsername() + " Information");

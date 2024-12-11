@@ -13,6 +13,7 @@ public class Customer extends User{
         customerId = ++nextCustomerId;
     }
 
+
     public int getCustomerId() {
         return customerId;
     }
