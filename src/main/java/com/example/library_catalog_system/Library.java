@@ -23,11 +23,11 @@ public class Library {
     public Library(String name, String address) {
         this.name = name;
         this.address = address;
-
     }
     public Library(){
         loadBooksFromFile();
-
+        borrowers = new ArrayList<>();
+        Scanner scanner = new Scanner(System.in);
     }
     public String getName() {
         return name;
@@ -148,49 +148,39 @@ public class Library {
         save_books_to_file();
         System.out.println("Book added successfully .");
     }
-    public void updatebooks(int bookId) {
-        Scanner input = new Scanner(System.in);
-
+    public void updatebooks(int bookId, float new_price, int new_numofcopies) {
         for (Book book : books) {
             if (book.getBookId() == bookId) {
                 System.out.println("Book is found.");
-                int mychoice;
-                do {
-                    System.out.println("Press 1 to update the price of the book.");
-                    System.out.println("Press 2 to update the number of copies of the book.");
-                    System.out.println("Press 3 to exit from updating process.");
-                    System.out.print("Enter your choice: ");
-                    mychoice = input.nextInt();
-
-                    switch (mychoice) {
-                        case 1:
-                            System.out.print("Enter the new price: ");
-                            int new_price = input.nextInt();
-                            book.setPrice(new_price);
-                            System.out.println("Price updated successfully.");
-                            break;
-
-                        case 2:
-                            System.out.print("Enter the new number of copies: ");
-                            int new_numofcopies = input.nextInt();
-                            book.numOfCopies = new_numofcopies;
-                            System.out.println("Number of copies updated successfully.");
-                            break;
-
-                        case 3:
-                            System.out.println("Exiting update menu.");
-                            break;
-
-                        default:
-                            System.out.println("Invalid choice. Please try again.");
-                    }
-                } while (mychoice != 3);
+                book.setPrice(new_price);
+                book.numOfCopies = new_numofcopies;
                 save_books_to_file();
                 return;
             }
+            else System.out.println("Book with ID " + bookId + " not found.");
         }
-
-        System.out.println("Book with ID " + bookId + " not found.");
+    }
+    public void updatebooks(int bookId, int new_numofcopies) {
+        for (Book book : books) {
+            if (book.getBookId() == bookId) {
+                System.out.println("Book is found.");
+                book.numOfCopies = new_numofcopies;
+                save_books_to_file();
+                return;
+            }
+            else System.out.println("Book with ID " + bookId + " not found.");
+        }
+    }
+    public void updatebooks(int bookId, float new_price) {
+        for (Book book : books) {
+            if (book.getBookId() == bookId) {
+                System.out.println("Book is found.");
+                book.setPrice(new_price);
+                save_books_to_file();
+                return;
+            }
+            else System.out.println("Book with ID " + bookId + " not found.");
+        }
     }
     public void removebook(int bookId) {
         boolean found = false;
@@ -229,11 +219,11 @@ public class Library {
         System.out.println("Total number of books in the library: " + totalBooks);
     }
     public void save_books_to_file(){
-
         try (FileWriter writer = new FileWriter(FILE_NAME)) {
             for (Book book : books) {
                 writer.write(book.toFileFormat() + "\n");
             }
+            books.clear();
         } catch (IOException e) {
             System.out.println("Error saving books to file: " + e.getMessage());
         }
@@ -260,6 +250,138 @@ public class Library {
         }
         System.out.println("The Library has " + Library.getBooks().size() + " books and " + allCopies + " copies");
 
+    }
+
+    //---------------> BORROWER
+    private final String file_name = "E:\\ahmed\\java\\Library_Catalog_System\\Library_Catalog_System\\files\\borrowers.txt";
+    //add borrower
+    public void addBorrower(Borrower newborrower){
+        borrowers.add(newborrower);
+        System.out.println("Borrower added! "+ newborrower.getBorrowerId());
+        save_borrowers_to_file();
+    }
+    public void addBorrower() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter Borrower Name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter Borrower Address: ");
+        String address = scanner.nextLine();
+        System.out.print("Enter Borrower Phone Number: ");
+        String phone = scanner.nextLine();
+        System.out.print("Enter Borrower Email Address: ");
+        String email = scanner.nextLine();
+        System.out.print("Enter Borrower Username: ");
+        String username = scanner.nextLine();
+        System.out.print("Enter Borrower Password: ");
+        String password = scanner.nextLine();
+        // Create a new Borrower and add it to the list
+        Borrower borrower = new Borrower(name, address, phone, email, username, password);
+        borrowers.add(borrower);
+        borrowBook(borrower);
+        save_borrowers_to_file();
+    }
+    public void borrowBook(Borrower borrower) {
+        displayAvailableBooks();
+        System.out.print("Enter the Book Title you want to borrow: ");
+        Scanner scanner = new Scanner(System.in);
+        String borrowedBook = scanner.nextLine();
+        for (Book book : books) {
+            if (book.getTitle().equals(borrowedBook)) {
+                if (book.getNumOfCopies() > 0) {
+                    Transaction transaction = new Transaction(book, borrower);
+                    borrower.getTransactions().add(transaction); // Add to Borrower's list of transactions
+                    save_books_to_file();
+                    System.out.println("Transaction successful! " + transaction);  // Prints the transaction details
+                    return;  // Exit the method once the book is successfully borrowed
+                }
+                else{
+                    System.out.println("Sorry. This book isn't available. ");
+                }
+            }   }
+        System.out.println("Book is unavailable or doesn't exist.");
+    }
+    //update borrower's contact info
+    public void updateBorrower(int borrowerID){
+        Scanner input = new Scanner(System.in);
+        for (Borrower borrower : borrowers){
+            if (borrower.getBorrowerId() == borrowerID){
+                int c;
+                do {
+                    System.out.println("Press 1 to update the borrower's phone number");
+                    System.out.println("Press 2 to update the borrower's email address");
+                    System.out.println("Press 3 to update the borrower's address");
+                    System.out.println("Press 4 to exit from updating process.");
+                    System.out.print("Enter your choice: ");
+                    c = input.nextInt();
+                    input.nextLine();
+                    switch (c){
+                        case 1:
+                            System.out.println("Enter borrower's new phone number: ");
+                            String NewPhone = input.nextLine();
+                            borrower.setPhone(NewPhone);
+                            System.out.println("Phone Number updated successfully.");
+                            break;
+                        case 2:
+                            System.out.println("Enter new email address: ");
+                            String newEmail = input.nextLine();
+                            borrower.setEmail(newEmail);
+                            System.out.println("Email Addreess updated successfully.");
+                            break;
+                        case 3:
+                            System.out.println("Enter the new Address: ");
+                            String newAddress = input.nextLine();
+                            borrower.setAddress(newAddress);
+                            System.out.println("Address updated successfully.");
+                            break;
+                        case 4:
+                            System.out.println("Exiting update borrower menu.");
+                            break;
+                        default:
+                            System.out.println("Invalid choice. Please try again.");
+                    }
+                }while (c != 4);
+                save_borrowers_to_file();
+                return;
+            }
+        }
+        System.out.println("the Borrower you are searching for is not found.");
+    }
+    //remove borrower
+    public void RemoveBorrower(int borrowerID){
+        boolean exist = false;
+        for(int i =0; i<borrowers.size(); i++){
+            if(borrowers.get(i).getBorrowerId() == borrowerID)
+            {
+                borrowers.remove(i);
+                save_borrowers_to_file();
+                System.out.println("Borrower "+ borrowerID +" has been removed.");
+                exist = true;
+                break;
+            }
+        }
+        if(!exist){
+            System.out.println("The Borrower you are searching for is not found.");
+        }
+    }
+    public void loadBorrowersFromFile(){
+        try (BufferedReader reader = new BufferedReader(new FileReader(file_name))) {
+            String line;
+            while((line = reader.readLine()) != null) {
+                Borrower borrower = Borrower.fromFileFormat(line);
+                borrowers.add(borrower);
+            }
+        } catch (IOException e) {
+            System.out.println("Error loading Borrowers from file: " + e.getMessage());
+        }
+    }
+    public void save_borrowers_to_file() {
+        try (FileWriter writer = new FileWriter(file_name)) {
+            for (Borrower borrower : borrowers) {
+                writer.write(borrower.toFileFormat() + "\n");
+            }
+        } catch (IOException e) {
+            System.out.println("Error saving books to file: " + e.getMessage());
+        }
     }
 }
 

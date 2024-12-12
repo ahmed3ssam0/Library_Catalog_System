@@ -40,4 +40,37 @@ public class Borrower extends User {
         System.out.println("Borrower ID: " + getBorrowerId());
     }
 
+
+    public static Borrower fromFileFormat(String line) {
+        String[] parts = line.split(",");  // Assuming CSV format for each borrower
+        int borrowerId = Integer.parseInt(parts[0]);
+        Borrower borrower = new Borrower(parts[1], parts[2], parts[3], parts[4], parts[5], parts[6]);
+        String borrowDateStr = parts[7];
+        String returnDateStr = parts[8];
+        LocalDate borrowDate = LocalDate.parse(borrowDateStr);  // Converting to LocalDate
+        LocalDate returnDate = LocalDate.parse(returnDateStr);
+
+        Transaction transaction = new Transaction();
+        transaction.setBorrowDate();
+        transaction.setReturnDate(returnDate);
+
+        borrower.getTransactions().add(transaction);
+
+        return borrower;
+    }
+
+
+
+    public String toFileFormat() {
+        String Borrower=  borrowerId + "," + getName() + "," + getAddress() + "," + getPhone() + "," + getEmail() + "," + getUsername() + "," + getPassword();
+
+        StringBuilder transactionsData = new StringBuilder();
+        for (Transaction transaction : transactions) {
+            String borrowDate = transaction.getBorrowDate().toString();  // Converting LocalDate to string
+            String returnDate = transaction.getReturnDate().toString();
+            transactionsData.append("," + borrowDate + "," + returnDate);
+        }
+
+        return Borrower + transactionsData.toString();
+    }
 }

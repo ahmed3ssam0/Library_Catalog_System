@@ -12,8 +12,8 @@
 
     <HBox fx:id="box" spacing="50" alignment="CENTER">
         <Button focusTraversable="false" text="Add Book" onAction="#adminAddBook"/>
-        <Button focusTraversable="false" text="Update Book"/>
-        <Button focusTraversable="false" text="Remove Book"/>
+        <Button focusTraversable="false" text="Update Book" onAction="#adminUpdateBook"/>
+        <Button focusTraversable="false" text="Remove Book" onAction="#adminRemoveBook"/>
         <Button focusTraversable="false" text="Back" onAction="#backToAdmin"/>
     </HBox>
 

@@ -5,11 +5,12 @@ public class Book {
     private static int nextBookId = 1;
     private final int bookId, numOfPages;
     private String title;
-    public int price, publicationYear, numOfCopies;
+    public float price;
+    public int publicationYear, numOfCopies;
     private Author author;
 
 
-    public Book(String title, int numOfPages, int numOfCopies, int price, int publicationYear, Author author) {
+    public Book(String title, int numOfPages, int numOfCopies, float price, int publicationYear, Author author) {
         if (title == null || title.isEmpty() || author == null) {
             throw new IllegalArgumentException("Title and Author cannot be null or empty");
         }
@@ -44,11 +45,11 @@ public class Book {
         this.title = title;
     }
 
-    public int getPrice() {
+    public float getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(float price) {
         if (price < 0) {
             throw new IllegalArgumentException("Price cannot be negative");
         }
@@ -124,7 +125,7 @@ public class Book {
         String title = parts[1];
         int numOfPages = Integer.parseInt(parts[2]);
         int numOfCopies = Integer.parseInt(parts[3]);
-        int price = Integer.parseInt(parts[4]);
+        float price = Float.parseFloat(parts[4]);
         int publicationYear = Integer.parseInt(parts[5]);
         Author author = Author.fromFileFormat(String.join(",", parts[6], parts[7], parts[8], parts[9]));
         return new Book(title, numOfPages, numOfCopies, price, publicationYear, author);

@@ -26,11 +26,13 @@ public class Controller {
     private TextField usernameField, passwordField,
             R_usernameField, R_passwordField, R_name, R_address, R_phone, R_email,
             bookTitle, bookPages, bookPrice, bookYear, bookCopies,
-            authorName, authorSurname, authorPhone, authorEmail;
+            authorName, authorSurname, authorPhone, authorEmail,
+            updatebookid, updatebookprice, updatebookcopies,
+            removebookid, removebookadminpassword;
     @FXML
     private Labeled messageLabel, messageLabel1;
 
-    Library library = new Library("Library", "Cairo");
+    Library library = new Library("Night Library", "Cairo");
     String fileName = "E:\\ahmed\\java\\Library_Catalog_System\\Library_Catalog_System\\files\\";
 
     private void switchScene(String fxmlFile, ActionEvent actionEvent) throws IOException {
@@ -86,8 +88,7 @@ public class Controller {
     private void handleLogin(ActionEvent actionEvent) throws IOException {
         String username = usernameField.getText();
         String password = passwordField.getText();
-        fileName += "customers.txt";
-        List<String> data = readData(fileName);
+        List<String> data = readData(fileName + "customers.txt");
         String cusUser, cusPassword;
         if ("admin".equals(username) && "admin".equals(password)) {
             switchToAdmin(actionEvent);
@@ -124,8 +125,7 @@ public class Controller {
         String phone = R_phone.getText();
         String email = R_email.getText();
 
-        fileName += "customers.txt";
-        List<String> allData = readData(fileName);
+        List<String> allData = readData(fileName + "customers.txt");
 
         int cnt = 0, i1 = 0, i2 = 0, i3 = 0;
         String cusUser, id;
@@ -186,7 +186,7 @@ public class Controller {
                     name, address, phone, email, username, password
             );
 
-            saveData(data, fileName);
+            saveData(data, fileName + "customers.txt");
             switchToLogin(actionEvent);
         } catch (Exception e) {
             messageLabel1.setText("An error occurred. Please try again.");
@@ -202,13 +202,14 @@ public class Controller {
         String authoremail = authorEmail.getText();
         String booktitle = bookTitle.getText();
         int bookpages = Integer.parseInt(bookPages.getText());
-        int bookprice = Integer.parseInt(bookPrice.getText());
+        float bookprice = Float.parseFloat(bookPrice.getText());
         int bookyear = Integer.parseInt(bookYear.getText());
         int bookcopies = Integer.parseInt(bookCopies.getText());
         Author author = new Author(authorname, authorsurname, authorphone, authoremail);
         Book book = new Book(booktitle, bookpages, bookcopies, bookprice, bookyear, author);
 
         try {
+            library.loadBooksFromFile();
             library.addbook(book);
             adminBooks(actionEvent);
         } catch (Exception e) {
@@ -216,6 +217,61 @@ public class Controller {
         }
     }
 
+    @FXML
+    private void updateBooks(ActionEvent actionEvent) throws IOException {
+        String Id = updatebookid.getText();
+        String price = updatebookprice.getText();
+        String copies = updatebookcopies.getText();
+        library.loadBooksFromFile();
+
+        if (Id.isBlank()) {
+            messageLabel.setText("Please add Book ID");
+            return;
+        }
+        if (copies.isBlank() && price.isBlank()) {
+            messageLabel.setText("Please add new Book Price or new Number of Copies");
+            return;
+        }
+        if (copies.isBlank()) {
+            int bookId = Integer.parseInt(Id);
+            float bookprice = Float.parseFloat(price);
+            library.updatebooks(bookId, bookprice);
+            adminBooks(actionEvent);
+        }
+        if (price.isBlank()) {
+            int bookId = Integer.parseInt(Id);
+            int bookcopies = Integer.parseInt(copies);
+            library.updatebooks(bookId, bookcopies);
+            adminBooks(actionEvent);
+        }
+        if (!Id.isBlank() && !copies.isBlank() && !price.isBlank()) {
+            int bookId = Integer.parseInt(Id);
+            float bookprice = Float.parseFloat(price);
+            int bookcopies = Integer.parseInt(copies);
+            library.updatebooks(bookId, bookprice, bookcopies);
+            adminBooks(actionEvent);
+        }
+    }
+
+    @FXML
+    private void removeBooks(ActionEvent actionEvent) throws IOException {
+        String bookId = removebookid.getText();
+        String password = removebookadminpassword.getText();
+        library.loadBooksFromFile();
+
+        if (bookId.isBlank()) {
+            messageLabel.setText("Please add Book ID");
+            return;
+        }
+        if (password.isBlank()) {
+            messageLabel.setText("Please add Admin Password");
+            return;
+        }
+        if (password.equals("admin")) {
+            library.removebook(parseInt(bookId));
+            adminBooks(actionEvent);
+        }
+    }
 
     @FXML
     private void switchToLogin(ActionEvent actionEvent) throws IOException {
@@ -240,6 +296,16 @@ public class Controller {
     @FXML
     private void adminAddBook(ActionEvent actionEvent) throws IOException {
         switchScene("admin_add_book.fxml", actionEvent);
+    }
+
+    @FXML
+    private void adminUpdateBook(ActionEvent actionEvent) throws IOException {
+        switchScene("admin_update_book.fxml", actionEvent);
+    }
+
+    @FXML
+    private void adminRemoveBook(ActionEvent actionEvent) throws IOException {
+        switchScene("admin_remove_book.fxml", actionEvent);
     }
 
     @FXML
