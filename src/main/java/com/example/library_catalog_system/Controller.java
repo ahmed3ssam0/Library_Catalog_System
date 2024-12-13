@@ -9,6 +9,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -28,9 +30,16 @@ public class Controller {
             bookTitle, bookPages, bookPrice, bookYear, bookCopies,
             authorName, authorSurname, authorPhone, authorEmail,
             updatebookid, updatebookprice, updatebookcopies,
-            removebookid, removebookadminpassword;
+            removebookid, removeadminpassword, removeborrowerid,
+            borrowerName, borrowerAddress, borrowerEmail, borrowerPhone,
+            updateborrowerid, updateborrowerphone, updateborroweremail, updateborroweraddress;
     @FXML
     private Labeled messageLabel, messageLabel1;
+
+    @FXML
+    private Text text;
+
+    Alert alert = new Alert(Alert.AlertType.INFORMATION);
 
     Library library = new Library("Night Library", "Cairo");
     String fileName = "E:\\ahmed\\java\\Library_Catalog_System\\Library_Catalog_System\\files\\";
@@ -176,8 +185,8 @@ public class Controller {
         try {
             Customer customer = new Customer(username, password, name, address, phone, email);
             int cusId = customer.getCustomerId();
-            for (int i = 0; i < takenIds.size(); ++i) {
-                if (takenIds.get(i) == cusId) {
+            for (Integer takenId : takenIds) {
+                if (takenId == cusId) {
                     customer.setCustomerId(++cusId);
                 } else break;
             }
@@ -190,7 +199,6 @@ public class Controller {
             switchToLogin(actionEvent);
         } catch (Exception e) {
             messageLabel1.setText("An error occurred. Please try again.");
-            e.printStackTrace();
         }
     }
 
@@ -201,20 +209,53 @@ public class Controller {
         String authorphone = authorPhone.getText();
         String authoremail = authorEmail.getText();
         String booktitle = bookTitle.getText();
-        int bookpages = Integer.parseInt(bookPages.getText());
-        float bookprice = Float.parseFloat(bookPrice.getText());
-        int bookyear = Integer.parseInt(bookYear.getText());
-        int bookcopies = Integer.parseInt(bookCopies.getText());
+        String pages = bookPages.getText();
+        String price = bookPrice.getText();
+        String year = bookYear.getText();
+        String copies = bookCopies.getText();
+
+        if (authoremail.isBlank() || authorname.isBlank() || authorphone.isBlank() ||
+                authorsurname.isBlank() || booktitle.isBlank() || pages.isBlank() ||
+                price.isBlank() || year.isBlank() || copies.isBlank()) {
+            messageLabel.setText("Please fill all the fields");
+            return;
+        }
+        if (!authoremail.contains("@") || !authoremail.contains(".")) {
+            messageLabel.setText("Invalid email format");
+            return;
+        }
+        if (!authorphone.matches("\\d+")) {
+            messageLabel.setText("Phone number must contain only digits");
+            return;
+        }
+        if (!pages.matches("\\d+")) {
+            messageLabel.setText("Phone number must contain only digits");
+            return;
+        }
+        if (!price.matches("\\d+(\\.\\d+)?")) {
+            messageLabel.setText("Phone number must contain only digits");
+            return;
+        }
+        if (!year.matches("\\d+")) {
+            messageLabel.setText("Phone number must contain only digits");
+            return;
+        }
+        if (!copies.matches("\\d+")) {
+            messageLabel.setText("Phone number must contain only digits");
+            return;
+        }
+        int bookpages = Integer.parseInt(pages);
+        float bookprice = Float.parseFloat(price);
+        int bookyear = Integer.parseInt(year);
+        int bookcopies = Integer.parseInt(copies);
         Author author = new Author(authorname, authorsurname, authorphone, authoremail);
         Book book = new Book(booktitle, bookpages, bookcopies, bookprice, bookyear, author);
-
-        try {
-            library.loadBooksFromFile();
-            library.addbook(book);
-            adminBooks(actionEvent);
-        } catch (Exception e) {
-            messageLabel.setText("An error occurred. Please try again.");
-        }
+        library.loadBooksFromFile();
+        library.addbook(book);
+        alert.setTitle("Add Book");
+        alert.setHeaderText("Book added successfully");
+        alert.showAndWait();
+        adminBooks(actionEvent);
     }
 
     @FXML
@@ -236,12 +277,18 @@ public class Controller {
             int bookId = Integer.parseInt(Id);
             float bookprice = Float.parseFloat(price);
             library.updatebooks(bookId, bookprice);
+            alert.setTitle("Update Book");
+            alert.setHeaderText("Book updated successfully");
+            alert.showAndWait();
             adminBooks(actionEvent);
         }
         if (price.isBlank()) {
             int bookId = Integer.parseInt(Id);
             int bookcopies = Integer.parseInt(copies);
             library.updatebooks(bookId, bookcopies);
+            alert.setTitle("Update Book");
+            alert.setContentText("Book updated successfully");
+            alert.showAndWait();
             adminBooks(actionEvent);
         }
         if (!Id.isBlank() && !copies.isBlank() && !price.isBlank()) {
@@ -249,6 +296,9 @@ public class Controller {
             float bookprice = Float.parseFloat(price);
             int bookcopies = Integer.parseInt(copies);
             library.updatebooks(bookId, bookprice, bookcopies);
+            alert.setTitle("Update Book");
+            alert.setContentText("Book updated successfully");
+            alert.showAndWait();
             adminBooks(actionEvent);
         }
     }
@@ -256,7 +306,7 @@ public class Controller {
     @FXML
     private void removeBooks(ActionEvent actionEvent) throws IOException {
         String bookId = removebookid.getText();
-        String password = removebookadminpassword.getText();
+        String password = removeadminpassword.getText();
         library.loadBooksFromFile();
 
         if (bookId.isBlank()) {
@@ -269,7 +319,101 @@ public class Controller {
         }
         if (password.equals("admin")) {
             library.removebook(parseInt(bookId));
+            alert.setTitle("Remove Book");
+            alert.setHeaderText("Book removed successfully");
+            alert.showAndWait();
             adminBooks(actionEvent);
+        }
+    }
+
+    @FXML
+    private void addBorrower(ActionEvent actionEvent) throws IOException {
+        String name = borrowerName.getText();
+        String address = borrowerAddress.getText();
+        String phone = borrowerPhone.getText();
+        String email = borrowerEmail.getText();
+
+        if (name.isBlank() || address.isBlank() || phone.isBlank() ||
+                email.isBlank()) {
+            messageLabel.setText("Please fill all the fields");
+            return;
+        }
+        if (!email.contains("@") || !email.contains(".")) {
+            messageLabel.setText("Invalid email format");
+            return;
+        }
+        if (!phone.matches("\\d+")) {
+            messageLabel.setText("Phone number must contain only digits");
+            return;
+        }
+
+        library.loadBorrowersFromFile();
+        Borrower borrower = new Borrower(name, address, phone, email);
+        library.addBorrower(borrower);
+        alert.setTitle("Add Borrower");
+        alert.setHeaderText("Borrower added successfully");
+        alert.showAndWait();
+        adminBorrowers(actionEvent);
+
+    }
+
+    @FXML
+    private void updateBorrower(ActionEvent actionEvent) throws IOException {
+        String Id = updateborrowerid.getText();
+        String address = updateborroweraddress.getText();
+        String phone = updateborrowerphone.getText();
+        String email = updateborroweremail.getText();
+
+        if (Id.isBlank()) {
+            messageLabel.setText("Please add Borrower ID");
+            return;
+        }
+        if (address.isBlank() && phone.isBlank() && email.isBlank()) {
+            messageLabel.setText("Please fill at least one field");
+            return;
+        }
+
+        library.loadBorrowersFromFile();
+        library.updateBorrower(parseInt(Id), email, address, phone);
+        alert.setTitle("Update Borrower");
+        alert.setHeaderText("Borrower updated successfully");
+        alert.showAndWait();
+        adminBorrowers(actionEvent);
+    }
+
+    @FXML
+    private void removeBorrower(ActionEvent actionEvent) throws IOException {
+        String Id = removeborrowerid.getText();
+        String password = removeadminpassword.getText();
+
+        if (Id.isBlank()) {
+            messageLabel.setText("Please add Book ID");
+            return;
+        }
+        if (password.isBlank()) {
+            messageLabel.setText("Please add Admin Password");
+            return;
+        }
+
+        library.loadBorrowersFromFile();
+        if (password.equals("admin")) {
+            library.RemoveBorrower(parseInt(Id));
+            alert.setTitle("Remove Borrower");
+            alert.setHeaderText("Borrower removed successfully");
+            alert.showAndWait();
+            adminBorrowers(actionEvent);
+        }
+    }
+
+    @FXML
+    private void libraryInventory() throws IOException {
+        library.loadBooksFromFile();
+        if (library.getBooks().isEmpty()) {
+            text.setText("There is no books in the library");
+            return;
+        }
+        for (int i = 0; i < library.getBooks().size(); i++) {
+            text.setText("Book: " + library.getBooks().get(i).getTitle() + " - Available Copies: " + library.getBooks().get(i).numOfCopies + "\n");
         }
     }
 
@@ -311,6 +455,21 @@ public class Controller {
     @FXML
     private void adminBorrowers(ActionEvent actionEvent) throws IOException {
         switchScene("admin_borrowers.fxml", actionEvent);
+    }
+
+    @FXML
+    private void adminAddBorrower(ActionEvent actionEvent) throws IOException {
+        switchScene("admin_add_borrowers.fxml", actionEvent);
+    }
+
+    @FXML
+    private void adminUpdateBorrower(ActionEvent actionEvent) throws IOException {
+        switchScene("admin_update_borrowers.fxml", actionEvent);
+    }
+
+    @FXML
+    private void adminRemoveBorrower(ActionEvent actionEvent) throws IOException {
+        switchScene("admin_remove_borrowers.fxml", actionEvent);
     }
 
     @FXML
