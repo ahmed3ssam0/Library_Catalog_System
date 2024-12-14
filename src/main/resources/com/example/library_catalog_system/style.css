@@ -41,7 +41,7 @@ TextField, PasswordField {
     -fx-font-size: 13px;
 }
 
-.inventory {
+.inventory, .borrowhistory {
     fx-font-family: "Gill Sans", sans-serif;
     -fx-font-size: 15px;
     -fx-fill: #eee;

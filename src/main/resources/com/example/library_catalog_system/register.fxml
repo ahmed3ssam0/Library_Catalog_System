@@ -16,7 +16,7 @@
     <TextField fx:id="R_phone" focusTraversable="false" promptText="Phone Number"/>
     <TextField fx:id="R_email" focusTraversable="false" promptText="Email"/>
 
-    <Label fx:id="messageLabel1" alignment="CENTER" contentDisplay="CENTER"/>
+    <Label fx:id="messageLabel" alignment="CENTER" contentDisplay="CENTER"/>
 
     <HBox fx:id="box" spacing="50" alignment="CENTER">
         <Button focusTraversable="false" text="Register" fx:id="register" onAction="#handleRegister"/>

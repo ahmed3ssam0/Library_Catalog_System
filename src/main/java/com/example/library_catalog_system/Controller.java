@@ -32,9 +32,10 @@ public class Controller {
             updatebookid, updatebookprice, updatebookcopies,
             removebookid, removeadminpassword, removeborrowerid,
             borrowerName, borrowerAddress, borrowerEmail, borrowerPhone,
-            updateborrowerid, updateborrowerphone, updateborroweremail, updateborroweraddress;
+            updateborrowerid, updateborrowerphone, updateborroweremail, updateborroweraddress,
+            borrowerID, borrowedBookTitle, borrowedBookDays;
     @FXML
-    private Labeled messageLabel, messageLabel1;
+    private Labeled messageLabel;
 
     @FXML
     private Text text;
@@ -42,7 +43,6 @@ public class Controller {
     Alert alert = new Alert(Alert.AlertType.INFORMATION);
 
     Library library = new Library("Night Library", "Cairo");
-    String fileName = "E:\\ahmed\\java\\Library_Catalog_System\\Library_Catalog_System\\files\\";
 
     private void switchScene(String fxmlFile, ActionEvent actionEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(fxmlFile));
@@ -97,26 +97,21 @@ public class Controller {
     private void handleLogin(ActionEvent actionEvent) throws IOException {
         String username = usernameField.getText();
         String password = passwordField.getText();
-        List<String> data = readData(fileName + "customers.txt");
-        String cusUser, cusPassword;
+        library.loadCustomersFromFile();
+
+        if (username.isBlank() || password.isBlank()) {
+            messageLabel.setText("Please fill all the fields");
+            return;
+        }
+
         if ("admin".equals(username) && "admin".equals(password)) {
             switchToAdmin(actionEvent);
         } else {
-            for (String datum : data) {
-                int cnt = 0, i1 = 0, i2 = 0;
-                for (int j = 0; j < datum.length(); j++) {
-                    if (datum.charAt(j) == ',') {
-                        cnt++;
-                        if (cnt == 5) {
-                            i1 = j + 1;
-                        } else if (cnt == 6) {
-                            i2 = j + 1;
-                        }
-                    }
-                }
-                cusUser = datum.substring(i1, i2 - 1).trim();
-                cusPassword = datum.substring(i2, datum.length() - 1).trim();
-                if (cusUser.equals(username) && cusPassword.equals(password)) {
+            for (int i = 0; i < library.getCustomers().size(); i++) {
+                if (library.getCustomers().get(i).getUsername().equals(username) && library.getCustomers().get(i).getPassword().equals(password)) {
+                    alert.setTitle("Login");
+                    alert.setHeaderText("Login done successfully");
+                    alert.showAndWait();
                     switchToUser(actionEvent);
                 } else {
                     messageLabel.setText("Incorrect username or password");
@@ -133,72 +128,46 @@ public class Controller {
         String address = R_address.getText();
         String phone = R_phone.getText();
         String email = R_email.getText();
+        library.loadCustomersFromFile();
 
-        List<String> allData = readData(fileName + "customers.txt");
 
-        int cnt = 0, i1 = 0, i2 = 0, i3 = 0;
-        String cusUser, id;
-        List<Integer> takenIds = new ArrayList<>();
-        for (String datum : allData) {
-            for (int j = 0; j < datum.length(); j++) {
-                if (datum.charAt(j) == ',') {
-                    cnt++;
-                    if (cnt == 5) {
-                        i1 = j + 1;
-                    } else if (cnt == 1) {
-                        i3 = j;
-                    } else if (cnt == 6) {
-                        i2 = j + 1;
-                    }
-                }
-            }
-            cusUser = datum.substring(i1, i2 - 1).trim();
-            id = datum.substring(1, i3).trim();
-            takenIds.add(parseInt(id));
-
-            if (cusUser.equals(username)) {
-                messageLabel1.setText("Username is already taken");
+        for (int i = 0; i < library.getCustomers().size(); i++) {
+            if (library.getCustomers().get(i).getUsername().equals(username)) {
+                messageLabel.setText("Username is already taken");
+                return;
             }
         }
 
         if (username.isBlank() || password.isBlank() || name.isBlank() ||
                 address.isBlank() || phone.isBlank() || email.isBlank()) {
-            messageLabel1.setText("Please fill all the fields");
+            messageLabel.setText("Please fill all the fields");
             return;
         }
 
         if (password.length() < 8) {
-            messageLabel1.setText("Password must be at least 8 characters");
+            messageLabel.setText("Password must be at least 8 characters");
             return;
         }
 
         if (!email.contains("@") || !email.contains(".")) {
-            messageLabel1.setText("Invalid email format");
+            messageLabel.setText("Invalid email format");
             return;
         }
 
         if (!phone.matches("\\d+")) {
-            messageLabel1.setText("Phone number must contain only digits");
+            messageLabel.setText("Phone number must contain only digits");
             return;
         }
 
         try {
             Customer customer = new Customer(username, password, name, address, phone, email);
-            int cusId = customer.getCustomerId();
-            for (Integer takenId : takenIds) {
-                if (takenId == cusId) {
-                    customer.setCustomerId(++cusId);
-                } else break;
-            }
-            List<String> data = List.of(
-                    String.valueOf(customer.getCustomerId()),
-                    name, address, phone, email, username, password
-            );
-
-            saveData(data, fileName + "customers.txt");
+            library.registerCustomer(customer);
+            alert.setTitle("Register");
+            alert.setHeaderText("Registering done successfully");
+            alert.showAndWait();
             switchToLogin(actionEvent);
         } catch (Exception e) {
-            messageLabel1.setText("An error occurred. Please try again.");
+            messageLabel.setText("An error occurred. Please try again.");
         }
     }
 
@@ -406,6 +375,69 @@ public class Controller {
     }
 
     @FXML
+    private void borrowBook(ActionEvent actionEvent) throws IOException {
+        String borrowerId = borrowerID.getText();
+        String title = borrowedBookTitle.getText();
+        String borrowDays = borrowedBookDays.getText();
+
+        if (title.isBlank() || borrowDays.isBlank() || borrowerId.isBlank()) {
+            messageLabel.setText("Please fill all the fields");
+            return;
+        }
+        if (!borrowerId.matches("\\d+")) {
+            messageLabel.setText("Please add valid Book ID");
+            return;
+        }
+        if (!borrowDays.matches("\\d+")) {
+            messageLabel.setText("Please add valid number of days");
+            return;
+        }
+
+        int id = Integer.parseInt(borrowerId);
+        int days = Integer.parseInt(borrowDays);
+        library.loadBooksFromFile();
+        library.loadBorrowersFromFile();
+        for (Borrower borrower : library.getBorrowers()) {
+            if (id == borrower.getBorrowerId()) {
+                for (Book book : library.getBooks()) {
+                    if (book.getTitle().equals(title)) {
+                        library.borrowBook(borrower, title, days);
+                        alert.setTitle("Borrow Book");
+                        alert.setHeaderText("Book borrowed successfully");
+                        alert.showAndWait();
+                        adminBorrowers(actionEvent);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    @FXML
+    private void borrowerHistory(ActionEvent actionEvent) throws IOException {
+        String borrowedId = borrowerID.getText();
+        if (borrowedId.isBlank()) {
+            messageLabel.setText("Please add Borrower ID");
+            return;
+        }
+        int id = parseInt(borrowedId);
+        library.loadBorrowersFromFile();
+        for (Borrower borrower : library.getBorrowers()) {
+            if (borrower.getBorrowerId() == id) {
+                List<String> data;
+                data = borrower.viewBorrowingHistory();
+                if(data.isEmpty()) {
+                    text.setText("There is no old borrowing for this id");
+                    return;
+                }
+                for (String datum : data) {
+                    text.setText(datum);
+                }
+            } else messageLabel.setText("Borrower is not found");
+        }
+    }
+
+    @FXML
     private void libraryInventory() throws IOException {
         library.loadBooksFromFile();
         if (library.getBooks().isEmpty()) {
@@ -473,6 +505,21 @@ public class Controller {
     }
 
     @FXML
+    private void adminBorrowerView(ActionEvent actionEvent) throws IOException {
+        switchScene("admin_borrowers_view.fxml", actionEvent);
+    }
+
+    @FXML
+    private void adminBorrowerAdd(ActionEvent actionEvent) throws IOException {
+        switchScene("admin_borrowers_add.fxml", actionEvent);
+    }
+
+    @FXML
+    private void adminBorrowerHistory(ActionEvent actionEvent) throws IOException {
+        switchScene("admin_borrowers_history.fxml", actionEvent);
+    }
+
+    @FXML
     private void adminInventory(ActionEvent actionEvent) throws IOException {
         switchScene("admin_inventory.fxml", actionEvent);
     }
@@ -485,23 +532,5 @@ public class Controller {
     @FXML
     private void switchToUser(ActionEvent actionEvent) throws IOException {
         switchScene("user_panel.fxml", actionEvent);
-    }
-
-
-    private void saveData(List<String> data, String fileName) throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true));
-        writer.write(data.toString() + '\n');
-        writer.close();
-    }
-
-    private List<String> readData(String fileName) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(fileName));
-        String line;
-        List<String> data = new ArrayList<>();
-        while ((line = reader.readLine()) != null) {
-            data.add(line);
-        }
-        reader.close();
-        return data;
     }
 }

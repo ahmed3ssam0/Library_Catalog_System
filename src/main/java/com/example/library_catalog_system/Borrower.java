@@ -24,18 +24,23 @@ public class Borrower extends User {
     public List<Transaction> getTransactions() {
         return transactions;
     }
+
     //  View Borrowing History
-    public void viewBorrowingHistory() {
-        String filePath= "C:\\Users\\3510\\Desktop\\Library-System\\Library_Catalog_System\\files\\Borrowers\\"+borrowerId + "_history.txt";
+    public List<String> viewBorrowingHistory() {
+        String filePath= "E:\\ahmed\\java\\Library_Catalog_System\\Library_Catalog_System\\files\\Borrowers\\"+borrowerId + "_history.txt";
+        List<String> data = new ArrayList<>();
         System.out.println("Borrowing History for you: " );
         File writer=new File(filePath);
         try(Scanner scan=new Scanner(writer)){
-            while(scan.hasNextLine())
-                System.out.println(scan.nextLine());
+            while(scan.hasNextLine()) {
+                data.add(scan.nextLine());
+            }
+            return data;
         }
         catch (FileNotFoundException e){
             System.out.println("Error while Reading from file");
         }
+        return null;
     }
 
 

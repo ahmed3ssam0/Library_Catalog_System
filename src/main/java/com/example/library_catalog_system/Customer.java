@@ -44,6 +44,22 @@ public class Customer extends User{
     }
 
 
+    public String toFileFormat() {
+        return customerId + "," + getName() + "," + getAddress() + "," + getPhone() + "," + getEmail() + "," + username + "," + password;
+    }
+
+    public static Customer fromFileFormat(String line) {
+        String[] parts = line.split(",");
+        int customerId = Integer.parseInt(parts[0]);
+        String username = parts[1];
+        String password = parts[2];
+        String name = parts[3];
+        String address = parts[4];
+        String phone = parts[5];
+        String email = parts[6];
+        return new Customer(name, address, phone, email, username, password);
+    }
+
 
     public void display_info() {
         System.out.println("Display Customer : " + getUsername() + " Information");

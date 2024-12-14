@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 
 public class Library {
 
-    private final String FILE_NAME = "E:\\ahmed\\java\\Library_Catalog_System\\Library_Catalog_System\\files\\books.txt";
+    private final String FILE_NAME = "E:\\ahmed\\java\\Library_Catalog_System\\Library_Catalog_System\\files\\";
 
 
     private String name, address;
@@ -26,6 +26,8 @@ public class Library {
         this.name = name;
         this.address = address;
         borrowers = new ArrayList<>();
+        customers = new ArrayList<>();
+        All_Transaction = new ArrayList<>();
     }
 
     public Library() {
@@ -92,6 +94,37 @@ public class Library {
         }
     }
 
+
+    //-------------------- Customers -----------------------
+    public void registerCustomer(Customer customer) {
+        customers.add(customer);
+        save_customers_to_file();
+        System.out.println("Customer registered successfully.");
+    }
+
+    public void save_customers_to_file() {
+        try (FileWriter writer = new FileWriter(FILE_NAME + "customers.txt")) {
+            for (Customer customer : customers) {
+                writer.write(customer.toFileFormat() + "\n");
+            }
+            customers.clear();
+        } catch (IOException e) {
+            System.out.println("Error saving Customer to file: " + e.getMessage());
+        }
+    }
+
+    public void loadCustomersFromFile() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME + "customers.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                Customer customer = Customer.fromFileFormat(line);
+                customers.add(customer);
+            }
+        } catch (IOException e) {
+            System.out.println("Error loading Customers from file: " + e.getMessage());
+        }
+    }
+    //---------------------------------------------------------------
 
     public void sendNotifications() {
         LocalDate today = LocalDate.now();
@@ -237,7 +270,7 @@ public class Library {
     }
 
     public void save_books_to_file() {
-        try (FileWriter writer = new FileWriter(FILE_NAME)) {
+        try (FileWriter writer = new FileWriter(FILE_NAME + "books.txt")) {
             for (Book book : books) {
                 writer.write(book.toFileFormat() + "\n");
             }
@@ -248,7 +281,7 @@ public class Library {
     }
 
     public void loadBooksFromFile() {
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME + "books.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 Book book = Book.fromFileFormat(line);
@@ -271,6 +304,7 @@ public class Library {
         System.out.println("The Library has " + Library.getBooks().size() + " books and " + allCopies + " copies");
 
     }
+
     // Record All Transaction
     public void recordTransactionsToFile() {
         if (All_Transaction.isEmpty()) {
@@ -278,7 +312,7 @@ public class Library {
         } else {
             System.out.println("Library Transactions:");
 
-            try(PrintWriter writer=new PrintWriter("C:\\Users\\3510\\Desktop\\Library-System\\Library_Catalog_System\\files\\All_Transactions.txt")){
+            try(PrintWriter writer=new PrintWriter("E:\\ahmed\\java\\Library_Catalog_System\\Library_Catalog_System\\files\\All_Transactions.txt")){
                 for (Transaction transaction : All_Transaction)
                     writer.println("Transaction{" +
                             "borrower :" + transaction.getBorrower().getName() +
@@ -293,9 +327,10 @@ public class Library {
 
         }
     }
+
     //Record all transactions for each borrower in file named with his ID
     private void writeTransactionToFile(Borrower borrower) {
-        try (PrintWriter writer = new PrintWriter("C:\\Users\\3510\\Desktop\\Library-System\\Library_Catalog_System\\files\\Borrowers\\"+borrower.getBorrowerId() + "_history.txt")) {
+        try (PrintWriter writer = new PrintWriter(FILE_NAME + "Borrowers\\"+borrower.getBorrowerId() + "_history.txt")) {
             for(Transaction transaction: borrower.getTransactions()) {
                 writer.println("Transaction{" +
                         "book=" + transaction.getBook().getTitle() +
@@ -308,7 +343,7 @@ public class Library {
         }
     }
     //---------------> BORROWER
-    private final String file_name = "E:\\ahmed\\java\\Library_Catalog_System\\Library_Catalog_System\\files\\borrowers.txt";
+    private final String file_name = FILE_NAME + "borrowers.txt";
 
     //add borrower
     public void addBorrower(Borrower newborrower) {
@@ -330,19 +365,16 @@ public class Library {
         // Create a new Borrower and add it to the list
         Borrower borrower = new Borrower(name, address, phone, email);
         borrowers.add(borrower);
-        borrowBook(borrower);
+//        borrowBook(borrower);
         save_borrowers_to_file();
     }
 
-    public void borrowBook(Borrower borrower) {
+    public void borrowBook(Borrower borrower, String borrowedBook, int days) {
         displayAvailableBooks();
-        System.out.print("Enter the Book Title you want to borrow: ");
-        Scanner scanner = new Scanner(System.in);
-        String borrowedBook = scanner.nextLine();
         for (Book book : books) {
             if (book.getTitle().equals(borrowedBook)) {
                 if (book.getNumOfCopies() > 0) {
-                    Transaction transaction = new Transaction(book, borrower);
+                    Transaction transaction = new Transaction(book, borrower, days);
                     borrower.getTransactions().add(transaction); // Add to Borrower's list of transactions
                     book.decrementCopies();
                     All_Transaction.add(transaction);

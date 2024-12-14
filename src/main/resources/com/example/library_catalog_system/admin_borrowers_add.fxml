@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Label?>
+<VBox styleClass="body" alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.library_catalog_system.Controller" stylesheets="@style.css">
+
+    <Text text="Borrow Book" layoutX="50" layoutY="50" styleClass="welcome-text"/>
+    <TextField fx:id="borrowerID" focusTraversable="false" promptText="Borrower ID"/>
+    <TextField fx:id="borrowedBookTitle" focusTraversable="false" promptText="Book Title"/>
+    <TextField fx:id="borrowedBookDays" focusTraversable="false" promptText="Borrowing Days"/>
+
+    <Label fx:id="messageLabel" alignment="CENTER" contentDisplay="CENTER"/>
+
+    <HBox fx:id="box" spacing="50" alignment="CENTER">
+        <Button focusTraversable="false" text="Confirm Borrowing" onAction="#borrowBook"/>
+        <Button focusTraversable="false" text="Back" onAction="#adminBorrowerView"/>
+    </HBox>
+
+</VBox>

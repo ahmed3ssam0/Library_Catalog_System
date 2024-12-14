@@ -17,7 +17,7 @@ public class Main extends Application {
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
 
         stage.setScene(scene);
-        stage.setTitle("Library Catalog System");
+        stage.setTitle("Night Library");
         stage.setWidth(stage.getWidth());
         stage.setHeight(stage.getHeight());
         stage.show();

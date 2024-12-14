@@ -11,6 +11,7 @@
     <Text text="Borrowers Settings" layoutX="50" layoutY="50" styleClass="welcome-text"/>
 
     <HBox fx:id="box" spacing="50" alignment="CENTER">
+        <Button focusTraversable="false" text="View Borrower" onAction="#adminBorrowerView"/>
         <Button focusTraversable="false" text="Add Borrower" onAction="#adminAddBorrower"/>
         <Button focusTraversable="false" text="Update Borrower" onAction="#adminUpdateBorrower"/>
         <Button focusTraversable="false" text="Remove Borrower" onAction="#adminRemoveBorrower"/>
