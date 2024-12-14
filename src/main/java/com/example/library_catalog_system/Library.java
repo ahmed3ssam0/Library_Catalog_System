@@ -21,7 +21,7 @@ public class Library {
     private static List<Author> authors;
     private static List<Customer> customers;
     private static List<Borrower> borrowers;
-
+    private static List<Transaction>All_Transaction;
     public Library(String name, String address) {
         this.name = name;
         this.address = address;
@@ -111,6 +111,21 @@ public class Library {
             }
         }
     }
+    //System should record book returns and update availability
+    public void recordReturn(Borrower borrower) {
+        for (Transaction transaction : borrower.getTransactions()) {
+            if (transaction.getReturnDate().isEqual(LocalDate.now())) {
+                // ask admin if book returned
+                boolean is_returned = true;
+                if (is_returned) {
+                    transaction.getBook().incrementCopies();
+                    System.out.println("Return recorded: " + transaction.getBook().getTitle() + " returned by " + transaction.getBorrower().getName());
+                } else {
+                    System.out.println("You must pay " + transaction.Calculate_Fines() + " Fine For late returns");
+                }
+            }
+        }
+    }
 
     //Function Recommend 4 Books If The  chosen book is not available
     public void Recommend_books() {
@@ -124,37 +139,23 @@ public class Library {
         }
     }
 
-    //Function That Search for Specified Book By title and recommend some books if book not found
-    public void Search_book(String title) {
+    //Function That Search for Specified Book By title or Author name and recommend some books if book not found
+    public void Search_book(String Word) {
         boolean found = false;
         for (Book book : books) {
-            if (book.getTitle().equalsIgnoreCase(title) && book.getNumOfCopies() > 0) {
+            if ((book.getTitle().equalsIgnoreCase(Word)||book.getAuthor().getName().equalsIgnoreCase(Word)) && book.getNumOfCopies() > 0) {
                 book.displayBookInfo();
                 found = true;
                 break;
             }
         }
         if (!found) {
-            System.out.println("the book " + title + " is not available now , Here are some books you might like :\n ");
+            System.out.println("the book You Looking for is not available now , Here are some books you might like :\n ");
             Recommend_books();
         }
     }
 
-    // OverLoading Method for Previous Method
-    public void Search_book(Author author) {
-        boolean found = false;
-        for (Book book : books) {
-            if (book.getAuthor().equals(author) && book.getNumOfCopies() > 0) {
-                book.displayBookInfo();
-                found = true;
-                break;
-            }
-        }
-        if (!found) {
-            System.out.println("the book you looking for is not available now , Here are some books you might like : ");
-            Recommend_books();
-        }
-    }
+
 
     public void addbook(Book newbook) {
         books.add(newbook);
@@ -270,7 +271,42 @@ public class Library {
         System.out.println("The Library has " + Library.getBooks().size() + " books and " + allCopies + " copies");
 
     }
+    // Record All Transaction
+    public void recordTransactionsToFile() {
+        if (All_Transaction.isEmpty()) {
+            System.out.println("No transactions recorded.");
+        } else {
+            System.out.println("Library Transactions:");
 
+            try(PrintWriter writer=new PrintWriter("C:\\Users\\3510\\Desktop\\Library-System\\Library_Catalog_System\\files\\All_Transactions.txt")){
+                for (Transaction transaction : All_Transaction)
+                    writer.println("Transaction{" +
+                            "borrower :" + transaction.getBorrower().getName() +
+                            ", book : "+transaction.getBook().getTitle()+
+                            ", borrowDate=" + transaction.getBorrowDate() +
+                            ", returnDate=" + transaction.getReturnDate() +
+                            '}');
+            }
+            catch (IOException e){
+                System.out.println("Error writing transactions to file: " + e.getMessage());
+            }
+
+        }
+    }
+    //Record all transactions for each borrower in file named with his ID
+    private void writeTransactionToFile(Borrower borrower) {
+        try (PrintWriter writer = new PrintWriter("C:\\Users\\3510\\Desktop\\Library-System\\Library_Catalog_System\\files\\Borrowers\\"+borrower.getBorrowerId() + "_history.txt")) {
+            for(Transaction transaction: borrower.getTransactions()) {
+                writer.println("Transaction{" +
+                        "book=" + transaction.getBook().getTitle() +
+                        ", borrowDate=" + transaction.getBorrowDate() +
+                        ", returnDate=" + transaction.getReturnDate() +
+                        '}');
+            }
+        } catch (IOException e) {
+            System.out.println("Error writing transaction to file: " + e.getMessage());
+        }
+    }
     //---------------> BORROWER
     private final String file_name = "E:\\ahmed\\java\\Library_Catalog_System\\Library_Catalog_System\\files\\borrowers.txt";
 
@@ -308,6 +344,10 @@ public class Library {
                 if (book.getNumOfCopies() > 0) {
                     Transaction transaction = new Transaction(book, borrower);
                     borrower.getTransactions().add(transaction); // Add to Borrower's list of transactions
+                    book.decrementCopies();
+                    All_Transaction.add(transaction);
+                    recordTransactionsToFile();
+                    writeTransactionToFile(borrower);// Add to Borrower's list of transactions
                     save_books_to_file();
                     System.out.println("Transaction successful! " + transaction);  // Prints the transaction details
                     return;  // Exit the method once the book is successfully borrowed

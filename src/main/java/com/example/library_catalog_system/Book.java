@@ -31,7 +31,7 @@ public class Book {
     public String getTitle() {
         return title;
     }
-    public void setnumofcopies(int numOfCopies){
+    public void setNumOfCopies(int numOfCopies){
         this.numOfCopies=numOfCopies;
 
     }
@@ -91,9 +91,9 @@ public class Book {
     public void incrementCopies() {
         numOfCopies++;
     }
-    public void removebook(){
+    public void remove_book(){
         if (this.numOfCopies==0)
-            removebook();
+            remove_book();
     }
 
     public void decrementCopies() {

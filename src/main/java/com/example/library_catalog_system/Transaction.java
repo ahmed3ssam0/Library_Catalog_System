@@ -57,14 +57,15 @@ public class Transaction {
         return returnDate;
     }
     //Function Calculate Fine for overdue Returns
-    public double Calculate_Fines(double dailyFine){
+    public double Calculate_Fines(){
         LocalDate today =LocalDate.now();
         if(today.isAfter(this.returnDate)){
             int overdue_days = (int)(today.toEpochDay()-returnDate.toEpochDay());
-            return dailyFine * (double) overdue_days;
+            return 10 * (double) overdue_days;
         }
         return 0.0;
     }
+
     //Function To Check availability of The Book Before Borrowing it
     public void Check_availability(){
         if(this.book.getNumOfCopies()>0){

@@ -1,8 +1,11 @@
 package com.example.library_catalog_system;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Borrower extends User {
     private static int nextBorrowerId = 0;
@@ -23,9 +26,15 @@ public class Borrower extends User {
     }
     //  View Borrowing History
     public void viewBorrowingHistory() {
+        String filePath= "C:\\Users\\3510\\Desktop\\Library-System\\Library_Catalog_System\\files\\Borrowers\\"+borrowerId + "_history.txt";
         System.out.println("Borrowing History for you: " );
-        for (Transaction transaction : this.getTransactions()) {
-            System.out.println(transaction);
+        File writer=new File(filePath);
+        try(Scanner scan=new Scanner(writer)){
+            while(scan.hasNextLine())
+                System.out.println(scan.nextLine());
+        }
+        catch (FileNotFoundException e){
+            System.out.println("Error while Reading from file");
         }
     }
 
