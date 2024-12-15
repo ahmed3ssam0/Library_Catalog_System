@@ -8,6 +8,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Scanner;
+
+import static com.example.library_catalog_system.Library.books;
 
 public class Main extends Application {
     @Override
@@ -22,7 +25,6 @@ public class Main extends Application {
         stage.setHeight(stage.getHeight());
         stage.show();
     }
-    public static void main(String[] args) {
-        launch();
-    }
-}
+    public static void main(String[] args) {launch();}}
+
+

@@ -130,6 +130,8 @@ public class Book {
         Author author = Author.fromFileFormat(String.join(",", parts[6], parts[7], parts[8], parts[9]));
         return new Book(title, numOfPages, numOfCopies, price, publicationYear, author);
     }
-
+    public void setnumofcopies(int numOfCopies){
+        this.numOfCopies=numOfCopies;
+    }
 }
 
