@@ -12,28 +12,24 @@ import java.time.format.DateTimeFormatter;
 
 public class Library {
 
-    private final String FILE_NAME = "C:\\Users\\elturky\\Desktop\\project200\\Library_Catalog_System\\files";
+    private final String FILE_NAME = "E:\\ahmed\\java\\Library_Catalog_System\\Library_Catalog_System\\files\\";
 
 
     private String name, address;
-    private static int numOfSections, numOfBooks;
-    public static ArrayList<Book> books = new ArrayList<>();
+    private static int numOfBooks;
+    public static List<Book> books;
     private static List<Author> authors;
     private static List<Customer> customers;
     private static List<Borrower> borrowers;
-    private static List<Transaction>All_Transaction;
+    private static List<Transaction> All_Transaction;
+
     public Library(String name, String address) {
         this.name = name;
         this.address = address;
         borrowers = new ArrayList<>();
         customers = new ArrayList<>();
+        books = new ArrayList<>();
         All_Transaction = new ArrayList<>();
-    }
-
-    public Library() {
-        loadBooksFromFile();
-        borrowers = new ArrayList<>();
-        Scanner scanner = new Scanner(System.in);
     }
 
     public String getName() {
@@ -96,29 +92,57 @@ public class Library {
 
 
     //-------------------- Customers -----------------------
-    public void registerCustomer(Customer customer) {
-        customers.add(customer);
+
+//    public void loadCustomersFromFile() {
+////        Customer.loadNextCustomerId(CUSTOMERS_ID_FILE);
+//        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME + "customers.txt"))) {
+//            String line;
+//            while ((line = reader.readLine()) != null) {
+//                customers.add(Customer.fromFileFormat(line));
+//            }
+//        } catch (IOException e) {
+//            System.out.println("Error loading customers: " + e.getMessage());
+//        }
+//    }
+
+//    public void save_customers_to_file() {
+////        Customer.saveNextCustomerId(CUSTOMERS_ID_FILE);
+//        try (FileWriter writer = new FileWriter(FILE_NAME + "customers.txt")) {
+//            for (Customer customer : customers) {
+//                writer.write(customer.toFileFormat() + "\n");
+//            }
+//        } catch (IOException e) {
+//            System.out.println("Error saving customers: " + e.getMessage());
+//        }
+//    }
+
+    public void registerCustomer(Customer newCustomer) {
+        customers.add(newCustomer);
         save_customers_to_file();
-        System.out.println("Customer registered successfully.");
+        System.out.println("Customer " + newCustomer.getCustomerId() +  " registered successfully.");
     }
 
     public void save_customers_to_file() {
         try (FileWriter writer = new FileWriter(FILE_NAME + "customers.txt")) {
             for (Customer customer : customers) {
                 writer.write(customer.toFileFormat() + "\n");
+                System.out.println("Customer " + customer.toFileFormat() +  " registered successfully.");
             }
-            customers.clear();
         } catch (IOException e) {
             System.out.println("Error saving Customer to file: " + e.getMessage());
         }
     }
 
     public void loadCustomersFromFile() {
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME + "customers.txt"))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                Customer customer = Customer.fromFileFormat(line);
+        File writer = new File(FILE_NAME + "customers.txt");
+        try (Scanner scan = new Scanner(writer)) {
+            while (scan.hasNextLine()) {
+                Customer customer = Customer.fromFileFormat(scan.nextLine());
                 customers.add(customer);
+            }
+            for (Customer customer : customers) {
+                System.out.println("Customer " + customer.getCustomerId() +  " loaded successfully.");
+                System.out.println(customer.toFileFormat() + "\n");
             }
         } catch (IOException e) {
             System.out.println("Error loading Customers from file: " + e.getMessage());
@@ -126,24 +150,6 @@ public class Library {
     }
     //---------------------------------------------------------------
 
-    public void sendNotifications() {
-        LocalDate today = LocalDate.now();
-        System.out.println("Sending Notifications:");
-        for (Borrower borrower : borrowers) {
-            for (Transaction transaction : borrower.getTransactions()) {
-                // Reminder for items due today
-                if (transaction.getReturnDate().isEqual(today)) {
-                    System.out.println("Reminder: Book '" + transaction.getBook().getTitle() +
-                            "' is due today ");
-                }
-                // Notification for overdue items
-                else if (transaction.getReturnDate().isBefore(today)) {
-                    System.out.println("Overdue: Book '" + transaction.getBook().getTitle() +
-                            "' is overdue ");
-                }
-            }
-        }
-    }
     //System should record book returns and update availability
     public void recordReturn(Borrower borrower) {
         for (Transaction transaction : borrower.getTransactions()) {
@@ -193,7 +199,7 @@ public class Library {
     public void addbook(Book newbook) {
         books.add(newbook);
         save_books_to_file();
-        System.out.println("Book added successfully .");
+        System.out.println("Book added successfully.");
     }
 
     public void updatebooks(int bookId, float new_price, int new_numofcopies) {
@@ -274,7 +280,6 @@ public class Library {
             for (Book book : books) {
                 writer.write(book.toFileFormat() + "\n");
             }
-            books.clear();
         } catch (IOException e) {
             System.out.println("Error saving books to file: " + e.getMessage());
         }
@@ -306,20 +311,29 @@ public class Library {
     }
 
     // Record All Transaction
-    public void recordTransactionsToFile() {
+    public void recordTransactionsToFile(int type) {
         if (All_Transaction.isEmpty()) {
             System.out.println("No transactions recorded.");
         } else {
             System.out.println("Library Transactions:");
 
             try(PrintWriter writer=new PrintWriter("E:\\ahmed\\java\\Library_Catalog_System\\Library_Catalog_System\\files\\All_Transactions.txt")){
-                for (Transaction transaction : All_Transaction)
-                    writer.println("Transaction{" +
-                            "borrower :" + transaction.getBorrower().getName() +
-                            ", book : "+transaction.getBook().getTitle()+
-                            ", borrowDate=" + transaction.getBorrowDate() +
-                            ", returnDate=" + transaction.getReturnDate() +
-                            '}');
+                for (Transaction transaction : All_Transaction) {
+                    if (type == 1)
+                        writer.println("Transaction{" +
+                                "borrower :" + transaction.getBorrower().getName() +
+                                ", book : " + transaction.getBook().getTitle() +
+                                ", borrowDate=" + transaction.getBorrowDate() +
+                                ", returnDate=" + transaction.getReturnDate() +
+                                '}');
+                    else
+                        writer.println("Transaction{" +
+                                "Customer :" + transaction.getCustomer().getName() +
+                                ", book : " + transaction.getBook().getTitle() +
+                                ", borrowDate=" + transaction.getBorrowDate() +
+                                ", returnDate=" + transaction.getReturnDate() +
+                                '}');
+                }
             }
             catch (IOException e){
                 System.out.println("Error writing transactions to file: " + e.getMessage());
@@ -332,6 +346,19 @@ public class Library {
     private void writeTransactionToFile(Borrower borrower) {
         try (PrintWriter writer = new PrintWriter(FILE_NAME + "Borrowers\\"+borrower.getBorrowerId() + "_history.txt")) {
             for(Transaction transaction: borrower.getTransactions()) {
+                writer.println("Transaction{" +
+                        "book=" + transaction.getBook().getTitle() +
+                        ", borrowDate=" + transaction.getBorrowDate() +
+                        ", returnDate=" + transaction.getReturnDate() +
+                        '}');
+            }
+        } catch (IOException e) {
+            System.out.println("Error writing transaction to file: " + e.getMessage());
+        }
+    }
+    private void writeTransactionToFile(Customer customer) {
+        try (PrintWriter writer = new PrintWriter(FILE_NAME + "CustomersBorrowings\\" + customer.getCustomerId() + "_history.txt")) {
+            for(Transaction transaction: customer.getTransactions()) {
                 writer.println("Transaction{" +
                         "book=" + transaction.getBook().getTitle() +
                         ", borrowDate=" + transaction.getBorrowDate() +
@@ -369,6 +396,27 @@ public class Library {
         save_borrowers_to_file();
     }
 
+    public void customerBorrowBook(Customer customer, String borrowedBook, int days) {
+        for (Book book : books) {
+            if (book.getTitle().equals(borrowedBook)) {
+                if (book.getNumOfCopies() > 0) {
+                    Transaction transaction = new Transaction(book, customer, days);
+                    customer.getTransactions().add(transaction); // Add to Borrower's list of transactions
+                    book.decrementCopies();
+                    All_Transaction.add(transaction);
+                    recordTransactionsToFile(2);
+                    writeTransactionToFile(customer);// Add to Borrower's list of transactions
+                    save_books_to_file();
+                    System.out.println("Transaction successful! " + transaction);  // Prints the transaction details
+                    return;  // Exit the method once the book is successfully borrowed
+                } else {
+                    System.out.println("Sorry. This book isn't available. ");
+                }
+            }
+        }
+        System.out.println("Book is unavailable or doesn't exist.");
+    }
+
     public void borrowBook(Borrower borrower, String borrowedBook, int days) {
         displayAvailableBooks();
         for (Book book : books) {
@@ -378,7 +426,7 @@ public class Library {
                     borrower.getTransactions().add(transaction); // Add to Borrower's list of transactions
                     book.decrementCopies();
                     All_Transaction.add(transaction);
-                    recordTransactionsToFile();
+                    recordTransactionsToFile(1);
                     writeTransactionToFile(borrower);// Add to Borrower's list of transactions
                     save_books_to_file();
                     System.out.println("Transaction successful! " + transaction);  // Prints the transaction details

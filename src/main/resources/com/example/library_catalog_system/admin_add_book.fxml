@@ -11,17 +11,17 @@
       fx:controller="com.example.library_catalog_system.Controller" stylesheets="@style.css">
 
     <Text text="Book Information" layoutX="50" layoutY="50" styleClass="welcome-text"/>
-    <TextField fx:id="bookTitle" focusTraversable="false" promptText="Book Title"/>
-    <TextField fx:id="bookPages" focusTraversable="false" promptText="Number of Pages"/>
-    <TextField fx:id="bookPrice" focusTraversable="false" promptText="Price"/>
-    <TextField fx:id="bookYear" focusTraversable="false" promptText="Publication Year"/>
-    <TextField fx:id="bookCopies" focusTraversable="false" promptText="Number of Copies"/>
+    <TextField fx:id="bookTitle" promptText="Book Title"/>
+    <TextField fx:id="bookPages" promptText="Number of Pages"/>
+    <TextField fx:id="bookPrice" promptText="Price"/>
+    <TextField fx:id="bookYear" promptText="Publication Year"/>
+    <TextField fx:id="bookCopies" promptText="Number of Copies"/>
 
     <Text text="Author Information" layoutX="50" layoutY="50" styleClass="welcome-text"/>
-    <TextField fx:id="authorName" focusTraversable="false" promptText="Name"/>
-    <TextField fx:id="authorSurname" focusTraversable="false" promptText="Surname"/>
-    <TextField fx:id="authorPhone" focusTraversable="false" promptText="Phone Number"/>
-    <TextField fx:id="authorEmail" focusTraversable="false" promptText="Email"/>
+    <TextField fx:id="authorName" promptText="Name"/>
+    <TextField fx:id="authorSurname" promptText="Surname"/>
+    <TextField fx:id="authorPhone" promptText="Phone Number"/>
+    <TextField fx:id="authorEmail" promptText="Email"/>
 
     <Label fx:id="messageLabel" alignment="CENTER" contentDisplay="CENTER"/>
 

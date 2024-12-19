@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 public class Transaction {
     private Book book;
     private Borrower borrower;
+    private Customer customer;
     private LocalDate borrowDate;
     private LocalDate returnDate;
     public Transaction() {
@@ -18,6 +19,17 @@ public class Transaction {
         }
         book.decrementCopies();
         this.borrower = borrower;
+        this.borrowDate = LocalDate.now(); // Current date as borrow date
+        this.returnDate = this.borrowDate.plusDays(borrowDays); // Calculate return date
+    }
+    public Transaction(Book book, Customer customer, int borrowDays) {
+        this.book = book;
+        if (book.getNumOfCopies()==0)
+        {
+            throw new IllegalArgumentException("This book is unavailable for borrowing.");
+        }
+        book.decrementCopies();
+        this.customer = customer;
         this.borrowDate = LocalDate.now(); // Current date as borrow date
         this.returnDate = this.borrowDate.plusDays(borrowDays); // Calculate return date
     }
@@ -51,6 +63,10 @@ public class Transaction {
 
     public Borrower getBorrower() {
         return borrower;
+    }
+
+    public Customer getCustomer() {
+        return customer;
     }
 
     public LocalDate getReturnDate() {

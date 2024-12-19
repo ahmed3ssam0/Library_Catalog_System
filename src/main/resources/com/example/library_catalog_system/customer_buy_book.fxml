@@ -7,20 +7,21 @@
 
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <VBox styleClass="body" alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.library_catalog_system.Controller" stylesheets="@style.css">
 
-    <Text text="Update Borrower" layoutX="50" layoutY="50" styleClass="welcome-text"/>
-    <TextField fx:id="updateborrowerid" promptText="Borrower ID"/>
-    <TextField fx:id="updateborroweraddress" promptText="New Address"/>
-    <TextField fx:id="updateborrowerphone" promptText="New Phone"/>
-    <TextField fx:id="updateborroweremail" promptText="New Email"/>
+    <Text text="Buy Book" layoutX="50" layoutY="50" styleClass="welcome-text"/>
+    <TextField fx:id="customerUsername" promptText="Your Username"/>
+    <PasswordField fx:id="customerPassword" promptText="Your Password"/>
+    <TextField fx:id="customerBookTitle" promptText="Book Title"/>
+    <TextField fx:id="customerBookQuantity" promptText="Quantity"/>
 
     <Label fx:id="messageLabel" alignment="CENTER" contentDisplay="CENTER"/>
 
     <HBox fx:id="box" spacing="50" alignment="CENTER">
-        <Button focusTraversable="false" text="Update Borrower" onAction="#updateBorrower"/>
-        <Button focusTraversable="false" text="Back" onAction="#adminBorrowers"/>
+        <Button focusTraversable="false" text="Add To Cart" onAction="#addToCart"/>
+        <Button focusTraversable="false" text="Back" onAction="#userView"/>
     </HBox>
 
 </VBox>

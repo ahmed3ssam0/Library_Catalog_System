@@ -12,8 +12,8 @@
 
     <Text text="Update Book" layoutX="50" layoutY="50" styleClass="welcome-text"/>
     <TextField fx:id="updatebookid" focusTraversable="false" promptText="Book ID"/>
-    <TextField fx:id="updatebookprice" focusTraversable="false" promptText="New Price"/>
-    <TextField fx:id="updatebookcopies" focusTraversable="false" promptText="New Number of Copies"/>
+    <TextField fx:id="updatebookprice" promptText="New Price"/>
+    <TextField fx:id="updatebookcopies" promptText="New Number of Copies"/>
 
     <Label fx:id="messageLabel" alignment="CENTER" contentDisplay="CENTER"/>
 

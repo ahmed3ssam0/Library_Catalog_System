@@ -1,18 +1,23 @@
 package com.example.library_catalog_system;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Customer extends User{
     private static int nextCustomerId = 0;
     private int customerId;
     List<Order> orders;
+    public List<Transaction> transactions;
     private String username, password;
     public Customer(String name, String address, String phone, String email, String username, String password) {
         super(name, address, phone, email);
         this.username = username;
         this.password = password;
         this.orders = new ArrayList<>();
+        this.transactions = new ArrayList<>();
         customerId = ++nextCustomerId;
     }
 
@@ -22,6 +27,12 @@ public class Customer extends User{
     }
     public void setCustomerId(int customerId) {
         this.customerId = customerId;
+    }
+    public static void setNextCustomerId(int Id) {
+        nextCustomerId = Id;
+    }
+    public static int getNextCustomerId() {
+        return nextCustomerId;
     }
     public String getUsername() {
         return username;
@@ -43,6 +54,28 @@ public class Customer extends User{
         orders.add(order);
     }
 
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
+    public List<String> viewBorrowingHistory() {
+        String filePath= "E:\\ahmed\\java\\Library_Catalog_System\\Library_Catalog_System\\files\\CustomersBorrowings\\" + customerId + "_history.txt";
+        List<String> data = new ArrayList<>();
+        File writer=new File(filePath);
+        try(Scanner scan=new Scanner(writer)){
+            while(scan.hasNextLine()) {
+                data.add(scan.nextLine());
+            }
+            return data;
+        }
+        catch (FileNotFoundException e){
+            System.out.println("Error while Reading from file");
+        }
+        return null;
+    }
 
     public String toFileFormat() {
         return customerId + "," + getName() + "," + getAddress() + "," + getPhone() + "," + getEmail() + "," + username + "," + password;
@@ -50,14 +83,16 @@ public class Customer extends User{
 
     public static Customer fromFileFormat(String line) {
         String[] parts = line.split(",");
-        int customerId = Integer.parseInt(parts[0]);
-        String username = parts[1];
-        String password = parts[2];
-        String name = parts[3];
-        String address = parts[4];
-        String phone = parts[5];
-        String email = parts[6];
-        return new Customer(name, address, phone, email, username, password);
+        int Id = Integer.parseInt(parts[0]);
+        String name = parts[1];
+        String address = parts[2];
+        String phone = parts[3];
+        String email = parts[4];
+        String username = parts[5];
+        String password = parts[6];
+        Customer customer = new Customer(name, address, phone, email, username, password);
+        customer.customerId = Id;
+        return customer;
     }
 
 

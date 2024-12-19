@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<VBox styleClass="body" alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.library_catalog_system.Controller" stylesheets="@style.css">
+
+    <Text text="Books" layoutX="50" layoutY="50" styleClass="welcome-text"/>
+
+    <Text fx:id="text" styleClass="borrowhistory"/>
+
+    <HBox fx:id="box" spacing="50" alignment="CENTER">
+        <Button focusTraversable="false" text="Buy Book" onAction="#customerAddToCart"/>
+        <Button focusTraversable="false" text="Borrow Book" onAction="#customerBorrow"/>
+        <Button focusTraversable="false" text="Show Books" fx:id="showBook" onAction="#userBookView"/>
+        <Button focusTraversable="false" text="Back" fx:id="back" onAction="#switchToUser"/>
+    </HBox>
+
+</VBox>

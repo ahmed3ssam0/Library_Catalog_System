@@ -1,1 +1,1 @@
-Transaction{borrower :ahmed, book : harry poter, borrowDate=2024-12-14, returnDate=2024-12-19}
+Transaction{Customer :a, book : book, borrowDate=2024-12-19, returnDate=2024-12-20}

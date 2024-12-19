@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class Borrower extends User {
     private static int nextBorrowerId = 0;
-    private final int borrowerId;
+    private int borrowerId;
     public List<Transaction> transactions;
     public Borrower(String name, String address, String phone, String email) {
         super(name, address, phone, email);
@@ -57,34 +57,15 @@ public class Borrower extends User {
 
     public static Borrower fromFileFormat(String line) {
         String[] parts = line.split(",");  // Assuming CSV format for each borrower
-        int borrowerId = Integer.parseInt(parts[0]);
+        int Id = Integer.parseInt(parts[0]);
         Borrower borrower = new Borrower(parts[1], parts[2], parts[3], parts[4]);
-//        String borrowDateStr = parts[5];
-//        String returnDateStr = parts[6];
-//        LocalDate borrowDate = LocalDate.parse(borrowDateStr);  // Converting to LocalDate
-//        LocalDate returnDate = LocalDate.parse(returnDateStr);
-//
-//        Transaction transaction = new Transaction();
-//        transaction.setBorrowDate();
-//        transaction.setReturnDate(returnDate);
-//
-//        borrower.getTransactions().add(transaction);
-
+        borrower.borrowerId = Id;
         return borrower;
     }
 
 
 
     public String toFileFormat() {
-        String Borrower=  borrowerId + "," + getName() + "," + getAddress() + "," + getPhone() + "," + getEmail();
-
-        StringBuilder transactionsData = new StringBuilder();
-        for (Transaction transaction : transactions) {
-            String borrowDate = transaction.getBorrowDate().toString();  // Converting LocalDate to string
-            String returnDate = transaction.getReturnDate().toString();
-            transactionsData.append("," + borrowDate + "," + returnDate);
-        }
-
-        return Borrower + transactionsData.toString();
+        return borrowerId + "," + getName() + "," + getAddress() + "," + getPhone() + "," + getEmail();
     }
 }

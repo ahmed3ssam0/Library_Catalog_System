@@ -25,6 +25,9 @@ public class Main extends Application {
         stage.setHeight(stage.getHeight());
         stage.show();
     }
-    public static void main(String[] args) {launch();}}
+    public static void main(String[] args) {
+        launch();
+    }
+}
 
 

@@ -11,9 +11,9 @@
       fx:controller="com.example.library_catalog_system.Controller" stylesheets="@style.css">
 
     <Text text="Borrow Book" layoutX="50" layoutY="50" styleClass="welcome-text"/>
-    <TextField fx:id="borrowerID" focusTraversable="false" promptText="Borrower ID"/>
-    <TextField fx:id="borrowedBookTitle" focusTraversable="false" promptText="Book Title"/>
-    <TextField fx:id="borrowedBookDays" focusTraversable="false" promptText="Borrowing Days"/>
+    <TextField fx:id="borrowerID" promptText="Borrower ID"/>
+    <TextField fx:id="borrowedBookTitle" promptText="Book Title"/>
+    <TextField fx:id="borrowedBookDays" promptText="Borrowing Days"/>
 
     <Label fx:id="messageLabel" alignment="CENTER" contentDisplay="CENTER"/>
 

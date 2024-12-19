@@ -13,13 +13,14 @@
 
     <Text text="Welcome Back!" layoutX="50" layoutY="50" styleClass="login-text"/>
 
-    <TextField fx:id="usernameField" focusTraversable="false" promptText="Username"/>
-    <PasswordField fx:id="passwordField" focusTraversable="false" promptText="Password"/>
+    <TextField fx:id="usernameField" promptText="Username"/>
+    <PasswordField fx:id="passwordField" promptText="Password"/>
+
     <Label fx:id="messageLabel" alignment="CENTER" contentDisplay="CENTER"/>
 
     <HBox fx:id="box" spacing="50" alignment="CENTER">
         <Button focusTraversable="false" text="Login" fx:id="login" onAction="#handleLogin"/>
-        <Button focusTraversable="false" text="Back" fx:id="back" onAction="#backToHome"/>
+<!--        <Button focusTraversable="false" text="Back" fx:id="back" onAction="#backToHome"/>-->
     </HBox>
 
 </VBox>

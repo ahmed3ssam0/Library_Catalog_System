@@ -3,7 +3,8 @@ import java.util.*;
 
 public class Book {
     private static int nextBookId = 1;
-    private final int bookId, numOfPages;
+    private int bookId;
+    private final int numOfPages;
     private String title;
     public float price;
     public int publicationYear, numOfCopies;
@@ -121,15 +122,18 @@ public class Book {
 
     public static Book fromFileFormat(String line) {
         String[] parts = line.split(",");
-        int bookId = Integer.parseInt(parts[0]);
+        int Id = Integer.parseInt(parts[0]);
         String title = parts[1];
         int numOfPages = Integer.parseInt(parts[2]);
         int numOfCopies = Integer.parseInt(parts[3]);
         float price = Float.parseFloat(parts[4]);
         int publicationYear = Integer.parseInt(parts[5]);
         Author author = Author.fromFileFormat(String.join(",", parts[6], parts[7], parts[8], parts[9]));
-        return new Book(title, numOfPages, numOfCopies, price, publicationYear, author);
+        Book book = new Book(title, numOfPages, numOfCopies, price, publicationYear, author);
+        book.bookId = Id;
+        return book;
     }
+
     public void setnumofcopies(int numOfCopies){
         this.numOfCopies=numOfCopies;
     }
