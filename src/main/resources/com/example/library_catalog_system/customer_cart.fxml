@@ -14,7 +14,7 @@
     <Label fx:id="messageLabel" alignment="CENTER" contentDisplay="CENTER"/>
 
     <HBox fx:id="box" spacing="50" alignment="CENTER">
-        <Button focusTraversable="false" text="Show Cart" onAction="#showCart"/>
+        <Button fx:id="showBook" focusTraversable="false" text="Show Cart" onAction="#showCart"/>
         <Button focusTraversable="false" text="Update Item Quantity" onAction="#customerCartUpdate"/>
         <Button focusTraversable="false" text="Delete Item" onAction="#customerCartDelete"/>
         <Button focusTraversable="false" text="Confirm Buying" onAction="#customerBuying"/>

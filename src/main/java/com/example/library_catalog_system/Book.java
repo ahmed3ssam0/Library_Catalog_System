@@ -160,7 +160,7 @@ public class Book {
     }
 
     private void writeReviewToFile(int rate, String review) {
-        String filePath = "C:\\Users\\3510\\Desktop\\Library_Catalog_System\\files\\Books_reviews\\" + title + "_Reviews.txt";
+        String filePath = "E:\\ahmed\\java\\Library_Catalog_System\\Library_Catalog_System\\files\\Books_reviews\\" + title + "_Reviews.txt";
         try (PrintWriter writer = new PrintWriter(new FileWriter(filePath, true))) {
             writer.println("Rating: " + rate+" , Review: " + review);
             writer.println();
@@ -170,7 +170,7 @@ public class Book {
     }
 
     public List<String> showAllRatingsAndReviews() {
-        String filePath = "C:\\Users\\3510\\Desktop\\Library_Catalog_System\\files\\Books_reviews\\" + title + "_Reviews.txt";
+        String filePath = "E:\\ahmed\\java\\Library_Catalog_System\\Library_Catalog_System\\files\\Books_reviews\\" + title + "_Reviews.txt";
         List<String> data = new ArrayList<>();
         File writer=new File(filePath);
         try(Scanner scan=new Scanner(writer)){

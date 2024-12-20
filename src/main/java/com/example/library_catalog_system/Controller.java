@@ -554,9 +554,8 @@
                 Cart.appendText("There is no books in the cart");
                 return;
             }
-            for (int i = 0; i < cart.Cbooks.size(); i++) {
-                Cart.appendText(cart.Cbooks.toString());
-            }
+            Cart.appendText(cart.Cbooks.toString());
+            showBook.setVisible(false);
         }
 
         @FXML
