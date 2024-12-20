@@ -191,32 +191,33 @@ public class Library {
         }
     }
 
-    //Function Recommend 4 Books If The  chosen book is not available
-    public void Recommend_books() {
+    //Function Recommend 3 Books If The  chosen book is not available
+    public List<Book> Recommend_books() {
         ArrayList<Book> A = new ArrayList<>();
-        for (int i = 2; i < 6; i++) {
+        for (int i = 2; i < 5; i++) {
             A.add(books.get(i));
         }
         Collections.shuffle(A);
-        for (Book book : A) {
-            book.displayBookInfo();
-        }
+        return A;
     }
 
     //Function That Search for Specified Book By title or Author name and recommend some books if book not found
-    public void Search_book(String Word) {
+    public List<Book> Search_book(String Word) {
         boolean found = false;
+        List<Book> result = new ArrayList<>();
         for (Book book : books) {
             if ((book.getTitle().equalsIgnoreCase(Word)||book.getAuthor().getName().equalsIgnoreCase(Word)) && book.getNumOfCopies() > 0) {
-                book.displayBookInfo();
+                result.add(book);
                 found = true;
-                break;
+
             }
         }
         if (!found) {
             System.out.println("the book You Looking for is not available now , Here are some books you might like :\n ");
-            Recommend_books();
+            return Recommend_books();
         }
+        else
+            return result;
     }
 
 

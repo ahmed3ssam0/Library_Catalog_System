@@ -36,7 +36,7 @@
                 borrowerName, borrowerAddress, borrowerEmail, borrowerPhone,
                 updateborrowerid, updateborrowerphone, updateborroweremail, updateborroweraddress,
                 borrowerID, borrowedBookTitle, borrowedBookDays,
-                customerUsername, customerPassword, customerBookTitle, customerBookQuantity,reviewBookNameField, reviewRatingField, reviewTextField, viewReviewsBookNameField;;
+                customerUsername, customerPassword, customerBookTitle, customerBookQuantity,reviewBookNameField, reviewRatingField, reviewTextField,search_Field, viewReviewsBookNameField;;
         @FXML
         private Labeled messageLabel;
 
@@ -181,6 +181,39 @@
                 switchToLogin(actionEvent);
             } catch (Exception e) {
                 messageLabel.setText("An error occurred. Please try again.");
+            }
+        }
+
+        @FXML
+        private TextArea searchResultsArea;
+        @FXML
+        private void handleSearch() {
+            String query = search_Field.getText();
+
+            if (query.isEmpty()) {
+                messageLabel.setText("Please enter Book You want to search.");
+                return;
+            }
+
+            // Search for books
+            library.loadBooksFromFile();
+            List<Book> results = library.Search_book(query);
+
+            // Display results
+            if (results.size() == 1 && results.get(0).getNumOfCopies() > 0) {
+                Book book = results.get(0);
+                searchResultsArea.setText("Found Book:\n" +
+                        "Title: " + book.getTitle() + "\n" +
+                        "Author: " + book.getAuthor().getName() + "\n" +
+                        "Price: $" + book.getPrice() + "\n" +
+                        "Year: " + book.getPublicationYear() + "\n" +
+                        "Available Copies: " + book.getNumOfCopies());
+            } else {
+                StringBuilder recommendations = new StringBuilder("The book is not available. Here are some recommendations:\n");
+                for (Book book : results) {
+                    recommendations.append("- ").append(book.getTitle()).append(" by ").append(book.getAuthor().getName()).append("\n");
+                }
+                searchResultsArea.setText(recommendations.toString());
             }
         }
 
@@ -572,6 +605,9 @@
             }
             library.loadBooksFromFile();
             library.addReview(bookNameText, reviewText, rating);
+            alert.setHeaderText("Review added successfully!");
+            alert.showAndWait();
+            switchToReviews(actionEvent);
             messageLabel.setText("Review added successfully!");
             reviewBookNameField.clear();
             reviewRatingField.clear();
@@ -635,6 +671,11 @@
         }
 
         @FXML
+        private void backToLogIn(ActionEvent actionEvent) throws IOException {
+            switchScene("login.fxml", actionEvent);
+        }
+
+        @FXML
         private void adminBooks(ActionEvent actionEvent) throws IOException {
             switchScene("admin_books.fxml", actionEvent);
         }
@@ -678,6 +719,10 @@
         private void adminBorrowerView(ActionEvent actionEvent) throws IOException {
             switchScene("admin_borrowers_view.fxml", actionEvent);
         }
+        @FXML
+        private void Search(ActionEvent actionEvent) throws IOException {
+            switchScene("customer_Search.fxml", actionEvent);
+        }
 
         @FXML
         private void adminBorrowerAdd(ActionEvent actionEvent) throws IOException {
@@ -702,6 +747,10 @@
         @FXML
         private void switchToUser(ActionEvent actionEvent) throws IOException {
             switchScene("user_panel.fxml", actionEvent);
+        }
+        @FXML
+        private void switchToReviews(ActionEvent actionEvent) throws IOException {
+            switchScene("customer_ratings_reviews.fxml", actionEvent);
         }
 
         @FXML

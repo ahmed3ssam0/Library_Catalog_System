@@ -12,7 +12,7 @@
 
     <HBox fx:id="box" spacing="50" alignment="CENTER">
         <Button focusTraversable="false" text="Show History" onAction="#customerBorrowings"/>
-        <Button focusTraversable="false" text="Back" onAction="#userView"/>
+        <Button focusTraversable="false" text="Back" fx:id="back" onAction="#switchToUser"/>
     </HBox>
 
 </VBox>

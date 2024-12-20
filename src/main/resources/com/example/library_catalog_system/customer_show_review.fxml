@@ -20,6 +20,7 @@
     <Label fx:id="messageLabel" alignment="CENTER" contentDisplay="CENTER"/>
     <HBox spacing="50" alignment="CENTER" fx:id="box">
         <Button text="View Reviews" onAction="#viewBookReviews" focusTraversable="false"/>
+        <Button text="Back" onAction="#Reviews" focusTraversable="false"/>
     </HBox>
 
 

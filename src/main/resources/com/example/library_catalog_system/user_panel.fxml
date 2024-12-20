@@ -14,7 +14,7 @@
         <Button focusTraversable="false" text="Books" onAction="#userView"/>
         <Button focusTraversable="false" text="Borrowings" onAction="#customerBorrowHistory"/>
         <Button focusTraversable="false" text="Cart"/>
-        <Button focusTraversable="false" text="Logout" fx:id="back" onAction="#backToHome"/>
+        <Button focusTraversable="false" text="Logout" fx:id="back" onAction="#backToLogIn"/>
     </HBox>
 
 </VBox>

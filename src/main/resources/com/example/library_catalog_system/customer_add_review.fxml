@@ -19,7 +19,7 @@
 
     <HBox fx:id="box" spacing="50" alignment="CENTER">
         <Button focusTraversable="false" text="Submit Review" onAction="#addReview"/>
-        <Button focusTraversable="false" text="Back" onAction="#userView"/>
+        <Button focusTraversable="false" text="Back" onAction="#Reviews"/>
     </HBox>
 
 </VBox>
