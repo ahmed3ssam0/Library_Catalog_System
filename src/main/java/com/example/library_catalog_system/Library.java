@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 
 public class Library {
 
-    private final String FILE_NAME = "E:\\ahmed\\java\\Library_Catalog_System\\Library_Catalog_System\\files\\";
+    private final String FILE_NAME = "C:\\Users\\3510\\Desktop\\Library-System\\Library_Catalog_System\\files\\";
 
 
     private String name, address;
@@ -89,7 +89,32 @@ public class Library {
             authors.add(author);
         }
     }
+    public void addReview(String title, String review, int rating) {
+        for (Book book : books) {
+            if (book.getTitle().equalsIgnoreCase(title)) {
+                book.addReview(review, rating);
+                System.out.println("Review added successfully!");
+                return;
+            }
+        }
+        System.out.println("Book not found.");
+    }
 
+//    public void displayBookReviews(String title) {
+//        for (Book book : books) {
+//            if (book.getTitle().equalsIgnoreCase(title)) {
+//                System.out.println("Reviews for " + book.getTitle() + ":");
+//                if(book.getReviews().isEmpty()){
+//                    System.out.println("No Reviews For this Book");
+//                    return;
+//                }
+//
+//                System.out.println("Average Rating: " + book.getAverageRating());
+//                return;
+//            }
+//        }
+//        System.out.println("Book not found.");
+//    }
 
     //-------------------- Customers -----------------------
 

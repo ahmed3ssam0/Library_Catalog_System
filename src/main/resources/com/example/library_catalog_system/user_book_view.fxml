@@ -12,6 +12,7 @@
     <Text fx:id="text" styleClass="borrowhistory"/>
 
     <HBox fx:id="box" spacing="50" alignment="CENTER">
+        <Button focusTraversable="false" text="Rating and Reviews" onAction="#Reviews"/>
         <Button focusTraversable="false" text="Buy Book" onAction="#customerAddToCart"/>
         <Button focusTraversable="false" text="Borrow Book" onAction="#customerBorrow"/>
         <Button focusTraversable="false" text="Show Books" fx:id="showBook" onAction="#userBookView"/>

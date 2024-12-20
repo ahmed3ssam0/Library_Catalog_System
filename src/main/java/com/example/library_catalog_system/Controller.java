@@ -36,12 +36,15 @@
                 borrowerName, borrowerAddress, borrowerEmail, borrowerPhone,
                 updateborrowerid, updateborrowerphone, updateborroweremail, updateborroweraddress,
                 borrowerID, borrowedBookTitle, borrowedBookDays,
-                customerUsername, customerPassword, customerBookTitle, customerBookQuantity;
+                customerUsername, customerPassword, customerBookTitle, customerBookQuantity,reviewBookNameField, reviewRatingField, reviewTextField, viewReviewsBookNameField;;
         @FXML
         private Labeled messageLabel;
 
         @FXML
         private Text text;
+
+        @FXML
+        private TextArea reviewsDisplayArea;
 
         static String loginUsername = "", loginPassword = "";
 
@@ -547,6 +550,62 @@
         }
 
         @FXML
+        private void addReview(ActionEvent actionEvent) throws IOException{
+            String bookNameText = reviewBookNameField.getText();
+            String ratingText = reviewRatingField.getText();
+            String reviewText = reviewTextField.getText();
+
+            if (bookNameText.isBlank() || ratingText.isBlank() || reviewText.isBlank()) {
+                messageLabel.setText("Please fill all the fields.");
+                return;
+            }
+            if ( !ratingText.matches("\\d+")) {
+                messageLabel.setText("rating must be numeric.");
+                return;
+            }
+
+            int rating = Integer.parseInt(ratingText);
+
+            if (rating < 1 || rating > 5) {
+                messageLabel.setText("Rating must be between 1 and 5.");
+                return;
+            }
+            library.loadBooksFromFile();
+            library.addReview(bookNameText, reviewText, rating);
+            messageLabel.setText("Review added successfully!");
+            reviewBookNameField.clear();
+            reviewRatingField.clear();
+            reviewTextField.clear();
+        }
+
+        @FXML
+        private void viewBookReviews(ActionEvent actionEvent) throws IOException {
+            String bookNameText = viewReviewsBookNameField.getText();
+
+            if (bookNameText.isBlank()) {
+                messageLabel.setText("Please enter a book title.");
+                return;
+            }
+            library.loadBooksFromFile();
+            for (Book book : library.getBooks()) {
+                if (book.getTitle().equalsIgnoreCase(bookNameText)) {
+                    List<String> reviews ;
+                    reviews = book.showAllRatingsAndReviews();
+                    if (reviews.isEmpty()) {
+                        text.setText("No reviews yet.\n");
+                        return;
+                    }
+                    for (String datum : reviews) {
+                        reviewsDisplayArea.appendText(datum + "\n");
+                    }
+                    text.setText("Average Rating: "+book.getAverageRating());
+                    return;
+                }
+            }
+            messageLabel.setText("Book not found.");
+        }
+
+        @FXML
         private void customerBorrowings(ActionEvent actionEvent) throws IOException {
             library.loadCustomersFromFile();
             List<String> customers = new ArrayList<>();
@@ -649,7 +708,18 @@
         private void userView(ActionEvent actionEvent) throws IOException {
             switchScene("user_book_view.fxml", actionEvent);
         }
-
+        @FXML
+        private void Reviews(ActionEvent actionEvent) throws IOException{
+            switchScene("customer_ratings_reviews.fxml",actionEvent);
+        }
+        @FXML
+        private void add_review(ActionEvent actionEvent) throws IOException{
+            switchScene("customer_add_review.fxml",actionEvent);
+        }
+        @FXML
+        private void view_review(ActionEvent actionEvent) throws IOException{
+            switchScene("customer_show_review.fxml",actionEvent);
+        }
         @FXML
         private void customerBorrow(ActionEvent actionEvent) throws IOException {
             switchScene("customer_borrow_book.fxml", actionEvent);

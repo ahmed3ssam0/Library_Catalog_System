@@ -1,5 +1,9 @@
 package com.example.library_catalog_system;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
+import java.io.*;
 
 public class Book {
     private static int nextBookId = 1;
@@ -9,6 +13,8 @@ public class Book {
     public float price;
     public int publicationYear, numOfCopies;
     private Author author;
+    private List<String> reviews;
+    private List<Integer> ratings;
 
 
     public Book(String title, int numOfPages, int numOfCopies, float price, int publicationYear, Author author) {
@@ -24,6 +30,8 @@ public class Book {
         this.publicationYear = publicationYear;
         this.author = author;
         author.addBook(this);
+        this.reviews = new ArrayList<>();
+        this.ratings = new ArrayList<>();
     }
 
     public int getBookId() {
@@ -66,6 +74,18 @@ public class Book {
             throw new IllegalArgumentException("Invalid publication year");
         }
         this.publicationYear = publicationYear;
+    }
+    public List<String> getReviews() {
+        return reviews;
+    }
+    public void addReview(String review, int rating) {
+        this.reviews.add(review);
+        this.ratings.add(rating);
+        writeReviewToFile(rating, review);
+    }
+    public double getAverageRating() {
+        if (ratings.isEmpty()) return 0.0;
+        return ratings.stream().mapToInt(r -> r).average().orElse(0.0);
     }
 
     public int getNumOfPages() {
@@ -131,11 +151,39 @@ public class Book {
         Author author = Author.fromFileFormat(String.join(",", parts[6], parts[7], parts[8], parts[9]));
         Book book = new Book(title, numOfPages, numOfCopies, price, publicationYear, author);
         book.bookId = Id;
+
         return book;
     }
 
     public void setnumofcopies(int numOfCopies){
         this.numOfCopies=numOfCopies;
+    }
+    //////////////////////////////////
+
+    private void writeReviewToFile(int rate, String review) {
+        String filePath = "C:\\Users\\3510\\Desktop\\Library-System\\Library_Catalog_System\\files\\Books_reviews\\" + title + "_Reviews.txt";
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filePath, true))) {
+            writer.println("Rating: " + rate+" , Review: " + review);
+            writer.println();
+        } catch (IOException e) {
+            throw new RuntimeException("Error writing review to file: " + filePath, e);
+        }
+    }
+
+    public List<String> showAllRatingsAndReviews() {
+        String filePath = "C:\\Users\\3510\\Desktop\\Library-System\\Library_Catalog_System\\files\\Books_reviews\\" + title + "_Reviews.txt";
+        List<String> data = new ArrayList<>();
+        File writer=new File(filePath);
+        try(Scanner scan=new Scanner(writer)){
+            while(scan.hasNextLine()) {
+                data.add(scan.nextLine());
+            }
+            return data;
+        }
+        catch (FileNotFoundException e){
+            System.out.println("Error while Reading from file");
+        }
+        return null;
     }
 }
 
