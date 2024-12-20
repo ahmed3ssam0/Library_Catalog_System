@@ -1,5 +1,13 @@
 .body {
     -fx-background-image: url("images/pexels-technobulka-2908984.jpg");
+}
+.user {
+    -fx-background-image: url("images/pexels-photo-279222.jpeg");
+}
+.admin {
+    -fx-background-image: url("images/istockphoto-949118068-612x612.jpg");
+}
+.body, .user, .admin {
     -fx-background-repeat: no-repeat;
     -fx-background-position: center center;
     -fx-background-size: cover;

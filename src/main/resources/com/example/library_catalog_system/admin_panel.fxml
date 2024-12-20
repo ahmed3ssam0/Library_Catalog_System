@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<VBox styleClass="body" alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
+<VBox styleClass="admin" alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.library_catalog_system.Controller" stylesheets="@style.css">
 
     <Text text="Welcome Back Admin!" layoutX="50" layoutY="50" styleClass="welcome-text"/>
@@ -14,7 +14,7 @@
         <Button focusTraversable="false" text="Books" onAction="#adminBooks"/>
         <Button focusTraversable="false" text="Borrowers" onAction="#adminBorrowers"/>
         <Button focusTraversable="false" text="Inventory" onAction="#adminInventory"/>
-        <Button focusTraversable="false" text="Logout" onAction="#backToHome"/>
+        <Button focusTraversable="false" text="Logout" onAction="#switchToLogin"/>
     </HBox>
 
 </VBox>
