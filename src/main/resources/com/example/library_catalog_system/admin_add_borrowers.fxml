@@ -17,8 +17,8 @@
     <Label fx:id="messageLabel" alignment="CENTER" contentDisplay="CENTER"/>
 
     <HBox fx:id="box" spacing="50" alignment="CENTER">
-        <Button focusTraversable="false" text="Add Borrower" fx:id="addBorrwer" onAction="#addBorrower"/>
-        <Button focusTraversable="false" text="Back" fx:id="back" onAction="#adminBorrowers"/>
+        <Button focusTraversable="false" text="Add Borrower" onAction="#addBorrower"/>
+        <Button focusTraversable="false" text="Back" onAction="#adminBorrowers"/>
     </HBox>
 
 </VBox>

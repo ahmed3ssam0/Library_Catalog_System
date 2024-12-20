@@ -62,7 +62,7 @@ public class Customer extends User{
     }
 
     public List<String> viewBorrowingHistory() {
-        String filePath= "C:\\Users\\3510\\Desktop\\Library-System\\Library_Catalog_System\\files\\CustomersBorrowings\\" + customerId + "_history.txt";
+        String filePath= "E:\\ahmed\\java\\Library_Catalog_System\\Library_Catalog_System\\files\\CustomersBorrowings\\" + customerId + "_history.txt";
         List<String> data = new ArrayList<>();
         File writer=new File(filePath);
         try(Scanner scan=new Scanner(writer)){
@@ -104,12 +104,5 @@ public class Customer extends User{
         System.out.println("Email: " + getEmail());
         System.out.println("Address: " + getAddress());
         System.out.println("Phone Number: " + getPhone());
-        System.out.println("Orders: ");
-        for (Order order : orders) {
-            System.out.println(" - " + order.getOrderId());
-            for (Book book : order.getBooks()) {
-                System.out.println(" - " + book.getTitle());
-            }
-        }
     }
 }

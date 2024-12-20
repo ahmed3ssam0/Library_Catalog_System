@@ -19,8 +19,7 @@
     <Label fx:id="messageLabel" alignment="CENTER" contentDisplay="CENTER"/>
 
     <HBox fx:id="box" spacing="50" alignment="CENTER">
-        <Button focusTraversable="false" text="Login" fx:id="login" onAction="#handleLogin"/>
-<!--        <Button focusTraversable="false" text="Back" fx:id="back" onAction="#backToHome"/>-->
+        <Button focusTraversable="false" text="Login" onAction="#handleLogin"/>
     </HBox>
 
 </VBox>

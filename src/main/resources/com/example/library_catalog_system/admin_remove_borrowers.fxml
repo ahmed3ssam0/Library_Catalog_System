@@ -12,8 +12,8 @@
       fx:controller="com.example.library_catalog_system.Controller" stylesheets="@style.css">
 
     <Text text="Book Information" layoutX="50" layoutY="50" styleClass="welcome-text"/>
-    <TextField fx:id="removeborrowerid" focusTraversable="false" promptText="Borrower ID"/>
-    <PasswordField fx:id="removeadminpassword" focusTraversable="false" promptText="Admin Password"/>
+    <TextField fx:id="removeborrowerid" promptText="Borrower ID"/>
+    <PasswordField fx:id="removeadminpassword" promptText="Admin Password"/>
 
     <Label fx:id="messageLabel" alignment="CENTER" contentDisplay="CENTER"/>
 

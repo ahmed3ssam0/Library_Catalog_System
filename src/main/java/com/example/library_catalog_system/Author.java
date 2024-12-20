@@ -14,7 +14,7 @@ public class Author {
         this.surname = surname;
         this.email = email;
         this.phone = phone;
-        this.books = new ArrayList<>();
+        books = new ArrayList<>();
     }
 
     public String getName() {

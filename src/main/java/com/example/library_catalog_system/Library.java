@@ -6,17 +6,13 @@ import java.util.Scanner;
 import java.io.*;
 import java.util.List;
 import java.time.LocalDate;
-import java.util.*;
-
-import java.time.format.DateTimeFormatter;
 
 public class Library {
 
-    private final String FILE_NAME = "C:\\Users\\3510\\Desktop\\Library-System\\Library_Catalog_System\\files\\";
+    private final String FILE_NAME = "C:\\Users\\3510\\Desktop\\Library_Catalog_System\\files\\";
 
 
     private String name, address;
-    private static int numOfBooks;
     public static List<Book> books;
     private static List<Author> authors;
     private static List<Customer> customers;

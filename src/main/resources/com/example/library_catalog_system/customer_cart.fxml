@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<VBox styleClass="body" alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.library_catalog_system.Controller" stylesheets="@style.css">
+
+    <Text text="Cart" layoutX="50" layoutY="50" styleClass="welcome-text"/>
+
+    <TextArea fx:id="Cart" editable="false"/>
+
+    <Label fx:id="messageLabel" alignment="CENTER" contentDisplay="CENTER"/>
+
+    <HBox fx:id="box" spacing="50" alignment="CENTER">
+        <Button focusTraversable="false" text="Show Cart" onAction="#showCart"/>
+        <Button focusTraversable="false" text="Update Item Quantity" onAction="#customerCartUpdate"/>
+        <Button focusTraversable="false" text="Delete Item" onAction="#customerCartDelete"/>
+        <Button focusTraversable="false" text="Confirm Buying" onAction="#customerBuying"/>
+        <Button focusTraversable="false" text="Back" onAction="#switchToUser"/>
+    </HBox>
+
+</VBox>

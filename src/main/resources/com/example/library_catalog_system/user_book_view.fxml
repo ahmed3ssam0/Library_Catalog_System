@@ -7,17 +7,15 @@
 <VBox styleClass="body" alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.library_catalog_system.Controller" stylesheets="@style.css">
 
-    <Text text="Books" layoutX="50" layoutY="50" styleClass="welcome-text"/>
-
-    <Text fx:id="text" styleClass="borrowhistory"/>
+    <Text text="Book Options" layoutX="50" layoutY="50" styleClass="welcome-text"/>
 
     <HBox fx:id="box" spacing="50" alignment="CENTER">
-        <Button focusTraversable="false" text="Search Book" onAction="#Search"/>
-        <Button focusTraversable="false" text="Rating and Reviews" onAction="#Reviews"/>
+        <Button focusTraversable="false" text="Show Books" onAction="#customerShowBooks"/>
         <Button focusTraversable="false" text="Buy Book" onAction="#customerAddToCart"/>
         <Button focusTraversable="false" text="Borrow Book" onAction="#customerBorrow"/>
-        <Button focusTraversable="false" text="Show Books" fx:id="showBook" onAction="#userBookView"/>
-        <Button focusTraversable="false" text="Back" fx:id="back" onAction="#switchToUser"/>
+        <Button focusTraversable="false" text="Search Book" onAction="#Search"/>
+        <Button focusTraversable="false" text="Rating and Reviews" onAction="#Reviews"/>
+        <Button focusTraversable="false" text="Back" onAction="#switchToUser"/>
     </HBox>
 
 </VBox>

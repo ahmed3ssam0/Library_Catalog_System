@@ -9,8 +9,6 @@
 
     <Text text="Reviews" layoutX="50" layoutY="50" styleClass="welcome-text"/>
 
-
-
     <HBox fx:id="box" spacing="50" alignment="CENTER">
         <Button focusTraversable="false" text="Show Review" onAction="#view_review"/>
         <Button focusTraversable="false" text="Add Review" onAction="#add_review"/>

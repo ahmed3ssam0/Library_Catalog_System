@@ -7,7 +7,6 @@ public class CartBook {
     public CartBook(Book book, int quantity) {
         this.book = book;
         this.quantity = quantity;
-
     }
 
     public Book getBook() {
@@ -32,7 +31,7 @@ public class CartBook {
 
 
     public String toString() {
-        return "Book---> "+"Book id :"+book.getBookId() +",Book title :"+ book.getTitle() + ", Quantity: " + quantity + ", Total Price:" + (quantity * book.getPrice())+"$";
+        return "Book---> "+"Book id :"+ book.getBookId() +",Book title :"+ book.getTitle() + ", Quantity: " + quantity + ", Total Price:" + (quantity * book.getPrice())+"$";
     }
 
 
@@ -54,6 +53,7 @@ public class CartBook {
                 break;
             }
         }
+        if (book == null) System.out.println("Book not found");
 
 
 

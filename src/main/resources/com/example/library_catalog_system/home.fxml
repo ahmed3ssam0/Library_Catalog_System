@@ -11,8 +11,8 @@
     <Text text="Welcome to Night Library!" layoutX="50" layoutY="50" styleClass="welcome-text"/>
 
     <HBox fx:id="box" spacing="50" alignment="CENTER">
-        <Button focusTraversable="false" text="Login" fx:id="login" onAction="#switchToLogin"/>
-        <Button focusTraversable="false" text="Register" fx:id="register" onAction="#switchToRegister"/>
+        <Button focusTraversable="false" text="Login" onAction="#switchToLogin"/>
+        <Button focusTraversable="false" text="Register" onAction="#switchToRegister"/>
     </HBox>
 
 </VBox>

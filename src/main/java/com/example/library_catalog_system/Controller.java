@@ -36,23 +36,25 @@
                 borrowerName, borrowerAddress, borrowerEmail, borrowerPhone,
                 updateborrowerid, updateborrowerphone, updateborroweremail, updateborroweraddress,
                 borrowerID, borrowedBookTitle, borrowedBookDays,
-                customerUsername, customerPassword, customerBookTitle, customerBookQuantity,reviewBookNameField, reviewRatingField, reviewTextField,search_Field, viewReviewsBookNameField;;
+                customerUsername, customerPassword, customerBookTitle, customerBookQuantity,
+                reviewBookNameField, reviewRatingField, reviewTextField,search_Field, viewReviewsBookNameField,
+                cartUpdateI, cartUpdateQ,
+                buyingUsername, buyingPassword, creditNum, cvv;
         @FXML
         private Labeled messageLabel;
 
         @FXML
-        private Text text;
+        private TextArea reviewsDisplayArea, searchResultsArea, Cart, customerHistory, bookInventory, borrowerHistory, bookView;
 
-        @FXML
-        private TextArea reviewsDisplayArea;
-
-        static String loginUsername = "", loginPassword = "";
+        static String loginUsername = "", loginPassword = "", loginId = "";
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
 
         Library library = new Library("Night Library", "Cairo");
 
         Cart cart = new Cart();
+
+        Order order = new Order();
 
         private void switchScene(String fxmlFile, ActionEvent actionEvent) throws IOException {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(fxmlFile));
@@ -119,10 +121,12 @@
                 library.loadCustomersFromFile();
                 loginUsername = "";
                 loginPassword = "";
+                loginId = "";
                 for (Customer customer : library.getCustomers()) {
                     if (customer.getUsername().equals(username) && customer.getPassword().equals(password)) {
                         loginUsername += username;
                         loginPassword += password;
+                        loginId += Integer.toString(customer.getCustomerId());
                         messageLabel.setText("");
                         alert.setTitle("Login");
                         alert.setHeaderText("Login done successfully");
@@ -137,7 +141,7 @@
         }
 
         @FXML
-        private void handleRegister(ActionEvent actionEvent) throws IOException {
+        private void handleRegister(ActionEvent actionEvent) {
             String username = R_usernameField.getText();
             String password = R_passwordField.getText();
             String name = R_name.getText();
@@ -184,8 +188,6 @@
             }
         }
 
-        @FXML
-        private TextArea searchResultsArea;
         @FXML
         private void handleSearch() {
             String query = search_Field.getText();
@@ -460,7 +462,7 @@
         }
 
         @FXML
-        private void borrowerHistory(ActionEvent actionEvent) throws IOException {
+        private void borrowerHistory() {
             String borrowedId = borrowerID.getText();
             if (borrowedId.isBlank()) {
                 messageLabel.setText("Please add Borrower ID");
@@ -472,35 +474,36 @@
                 if (borrower.getBorrowerId() == id) {
                     List<String> data;
                     data = borrower.viewBorrowingHistory();
-                    if (data.isEmpty()) {
-                        text.setText("There is no old borrowing for this id");
+                    if (data == null) {
+                        borrowerHistory.setText("There is no old borrowing for this id");
                         return;
                     }
                     for (String datum : data) {
-                        text.setText(datum);
+                        borrowerHistory.appendText(datum + "\n");
                     }
                 } else messageLabel.setText("Borrower is not found");
             }
         }
 
         @FXML
-        private void libraryInventory() throws IOException {
+        private void libraryInventory() {
             library.loadBooksFromFile();
-            if (library.getBooks().isEmpty()) {
-                text.setText("There is no books in the library");
+            if (library.getBooks() == null || library.getBooks().isEmpty()) {
+                bookInventory.appendText("There is no books in the library");
                 return;
             }
             for (int i = 0; i < library.getBooks().size(); i++) {
-                text.setText("Book: " + library.getBooks().get(i).getTitle() + " - Available Copies: " + library.getBooks().get(i).numOfCopies + "\n");
+                bookInventory.appendText("Book: " + library.getBooks().get(i).getTitle() + " - Available Copies: " + library.getBooks().get(i).numOfCopies + "\n");
             }
+            showBook.setVisible(false);
         }
 
         @FXML
-        private void userBookView(ActionEvent actionEvent) throws IOException {
+        private void userBookView() {
             library.loadBooksFromFile();
             List<Book> books = library.getBooks();
             for (Book book : books) {
-                text.setText(book.getTitle() + " - Available copies: " + book.numOfCopies);
+                bookView.appendText(book.getTitle() + " - Available copies: " + book.numOfCopies);
             }
             showBook.setVisible(false);
         }
@@ -529,9 +532,10 @@
                     library.loadBooksFromFile();
                     for (Book book : library.getBooks()) {
                         if (book.getTitle().equals(title)) {
+                            cart.LoadBooksFromFile(loginId);
                             cart.addItems(book, quantity, library, Integer.toString(customer.getCustomerId()));
-                            alert.setTitle("Borrow Book");
-                            alert.setHeaderText("Book borrowed successfully");
+                            alert.setTitle("Add To Cart");
+                            alert.setHeaderText("Book added successfully");
                             alert.showAndWait();
                             userView(actionEvent);
                             return;
@@ -540,6 +544,75 @@
                 } else messageLabel.setText("Username or Password is incorrect");
             }
 
+        }
+
+        @FXML
+        private void showCart() {
+            library.loadBooksFromFile();
+            cart.LoadBooksFromFile(loginId);
+            if (cart.Cbooks == null || cart.Cbooks.isEmpty()) {
+                Cart.appendText("There is no books in the cart");
+                return;
+            }
+            for (int i = 0; i < cart.Cbooks.size(); i++) {
+                Cart.appendText(cart.Cbooks.toString());
+            }
+        }
+
+        @FXML
+        private void updateCart(ActionEvent actionEvent) throws IOException {
+            String idU = cartUpdateI.getText();
+            String quantityU = cartUpdateQ.getText();
+
+            if (idU.isBlank() || quantityU.isBlank()) {
+                messageLabel.setText("Please fill all the fields");
+                return;
+            }
+            if (!idU.matches("\\d+")) {
+                messageLabel.setText("Please add valid Book ID");
+                return;
+            }
+            if (!quantityU.matches("\\d+")) {
+                messageLabel.setText("Please add valid Book Quantity");
+                return;
+            }
+
+            int id = parseInt(idU);
+            int quantity = parseInt(quantityU);
+            library.loadBooksFromFile();
+            cart.LoadBooksFromFile(loginId);
+            if (cart.Cbooks.isEmpty()) {
+                messageLabel.setText("There is no books with this ID in the cart");
+                return;
+            }
+            cart.updateItemQuantity(id, quantity, library, loginId);
+            alert.setTitle("Update Quantity");
+            alert.setHeaderText("Item updated successfully");
+            alert.showAndWait();
+            customerCart(actionEvent);
+        }
+
+        @FXML
+        private void deleteCart(ActionEvent actionEvent) throws IOException {
+            String idU = cartUpdateI.getText();
+
+            if (idU.isBlank() || !idU.matches("\\d+")) {
+                messageLabel.setText("Please add valid Book ID");
+                return;
+            }
+
+            int id = parseInt(idU);
+            library.loadBooksFromFile();
+            cart.LoadBooksFromFile(loginId);
+            if (cart.Cbooks.isEmpty()) {
+                messageLabel.setText("There is no books with this ID in the cart");
+                return;
+            }
+            cart.deleteItem(id, library, loginId);
+            alert.setTitle("Delete Item");
+            alert.setHeaderText("Item deleted successfully");
+            alert.showAndWait();
+            customerCart(actionEvent);
         }
 
         @FXML
@@ -592,7 +665,7 @@
                 messageLabel.setText("Please fill all the fields.");
                 return;
             }
-            if ( !ratingText.matches("\\d+")) {
+            if (!ratingText.matches("\\d+")) {
                 messageLabel.setText("rating must be numeric.");
                 return;
             }
@@ -615,7 +688,7 @@
         }
 
         @FXML
-        private void viewBookReviews(ActionEvent actionEvent) throws IOException {
+        private void viewBookReviews() {
             String bookNameText = viewReviewsBookNameField.getText();
 
             if (bookNameText.isBlank()) {
@@ -625,16 +698,17 @@
             library.loadBooksFromFile();
             for (Book book : library.getBooks()) {
                 if (book.getTitle().equalsIgnoreCase(bookNameText)) {
-                    List<String> reviews ;
+                    List<String> reviews;
                     reviews = book.showAllRatingsAndReviews();
-                    if (reviews.isEmpty()) {
-                        text.setText("No reviews yet.\n");
+                    if (reviews.isEmpty() || reviews == null) {
+                        reviewsDisplayArea.appendText("No reviews yet.\n");
+                        showBook.setVisible(false);
                         return;
                     }
                     for (String datum : reviews) {
                         reviewsDisplayArea.appendText(datum + "\n");
                     }
-                    text.setText("Average Rating: "+book.getAverageRating());
+                    showBook.setVisible(false);
                     return;
                 }
             }
@@ -642,7 +716,72 @@
         }
 
         @FXML
-        private void customerBorrowings(ActionEvent actionEvent) throws IOException {
+        private void Cash(ActionEvent actionEvent) throws IOException {
+            String username = buyingUsername.getText();
+            String password = buyingPassword.getText();
+            System.out.println(loginUsername + " " + loginPassword);
+
+            if (username.isBlank() || password.isBlank()) {
+                messageLabel.setText("Please fill all the fields.");
+                return;
+            }
+            if (!username.equals(loginUsername) && !password.equals(loginPassword)) {
+                messageLabel.setText("Wrong username or password");
+                return;
+            }
+
+            library.loadBooksFromFile();
+            cart.LoadBooksFromFile(loginId);
+            order.loadOrdersFromFile(loginId);
+            order.orderBooks = cart.Cbooks;
+            order.saveBooksInOrder(loginId);
+            alert.setTitle("Ordering Transaction");
+            alert.setHeaderText("Order added successfully!");
+            alert.setContentText("Total Price: " + order.totalPrice());
+            alert.showAndWait();
+            switchToUser(actionEvent);
+        }
+
+        @FXML
+        private void Credit(ActionEvent actionEvent) throws IOException {
+            String username = buyingUsername.getText();
+            String password = buyingPassword.getText();
+            String credit = creditNum.getText();
+            String cvvn = cvv.getText();
+
+            if (username.isBlank() || password.isBlank() || credit.isBlank() || cvvn.isBlank()) {
+                messageLabel.setText("Please fill all the fields.");
+                return;
+            }
+            if (!username.equals(loginUsername) && !password.equals(loginPassword)) {
+                messageLabel.setText("Wrong username or password");
+                return;
+            }
+            if (!credit.matches("\\d+") || !cvvn.matches("\\d+")) {
+                messageLabel.setText("Please add valid credit card");
+                return;
+            }
+            if (cvvn.length() != 3) {
+                messageLabel.setText("Please add valid cvv");
+                return;
+            }
+
+            library.loadBooksFromFile();
+            cart.LoadBooksFromFile(loginId);
+            order.loadOrdersFromFile(loginId);
+            order.orderBooks = cart.Cbooks;
+            order.saveBooksInOrder(loginId);
+            cart.Cbooks.clear();
+            cart.clearFile(loginId);
+            alert.setTitle("Ordering Transaction");
+            alert.setHeaderText("Order added successfully!");
+            alert.setContentText("Total Price: " + order.totalPrice());
+            alert.showAndWait();
+            switchToUser(actionEvent);
+        }
+
+        @FXML
+        private void customerBorrowings() {
             library.loadCustomersFromFile();
             List<String> customers = new ArrayList<>();
             for (Customer customer : library.getCustomers()) {
@@ -651,8 +790,14 @@
                     break;
                 }
             }
-            text.setText(customers.toString());
-            text.setStyle("-fx-text-fill: #eee; -fx-font-size: 16px");
+            if (customers == null){
+                customerHistory.appendText("No History Yet");
+                return;
+            }
+            for(String data : customers) {
+                customerHistory.appendText(data + "\n");;
+            }
+            showBook.setVisible(false);
         }
 
         @FXML
@@ -719,6 +864,7 @@
         private void adminBorrowerView(ActionEvent actionEvent) throws IOException {
             switchScene("admin_borrowers_view.fxml", actionEvent);
         }
+
         @FXML
         private void Search(ActionEvent actionEvent) throws IOException {
             switchScene("customer_Search.fxml", actionEvent);
@@ -748,6 +894,7 @@
         private void switchToUser(ActionEvent actionEvent) throws IOException {
             switchScene("user_panel.fxml", actionEvent);
         }
+
         @FXML
         private void switchToReviews(ActionEvent actionEvent) throws IOException {
             switchScene("customer_ratings_reviews.fxml", actionEvent);
@@ -757,18 +904,27 @@
         private void userView(ActionEvent actionEvent) throws IOException {
             switchScene("user_book_view.fxml", actionEvent);
         }
+
+        @FXML
+        private void customerShowBooks(ActionEvent actionEvent) throws IOException {
+            switchScene("customer_show_books.fxml", actionEvent);
+        }
+
         @FXML
         private void Reviews(ActionEvent actionEvent) throws IOException{
             switchScene("customer_ratings_reviews.fxml",actionEvent);
         }
+
         @FXML
         private void add_review(ActionEvent actionEvent) throws IOException{
             switchScene("customer_add_review.fxml",actionEvent);
         }
+
         @FXML
         private void view_review(ActionEvent actionEvent) throws IOException{
             switchScene("customer_show_review.fxml",actionEvent);
         }
+
         @FXML
         private void customerBorrow(ActionEvent actionEvent) throws IOException {
             switchScene("customer_borrow_book.fxml", actionEvent);
@@ -782,6 +938,36 @@
         @FXML
         private void customerAddToCart(ActionEvent actionEvent) throws IOException {
             switchScene("customer_buy_book.fxml", actionEvent);
+        }
+
+        @FXML
+        private void customerCart(ActionEvent actionEvent) throws IOException {
+            switchScene("customer_cart.fxml", actionEvent);
+        }
+
+        @FXML
+        private void customerCartUpdate(ActionEvent actionEvent) throws IOException {
+            switchScene("customer_cart_update_quantity.fxml", actionEvent);
+        }
+
+        @FXML
+        private void customerCartDelete(ActionEvent actionEvent) throws IOException {
+            switchScene("customer_cart_delete.fxml", actionEvent);
+        }
+
+        @FXML
+        private void customerBuying(ActionEvent actionEvent) throws IOException {
+            switchScene("customer_confirm_buying.fxml", actionEvent);
+        }
+
+        @FXML
+        private void customerBuyingCash(ActionEvent actionEvent) throws IOException {
+            switchScene("customer_cash.fxml", actionEvent);
+        }
+
+        @FXML
+        private void customerBuyingCredit(ActionEvent actionEvent) throws IOException {
+            switchScene("customer_credit.fxml", actionEvent);
         }
 
     }

@@ -16,10 +16,9 @@
     <TextField fx:id="viewReviewsBookNameField" promptText="Enter Book Name"/>
     <TextArea fx:id="reviewsDisplayArea" editable="false" wrapText="true" prefHeight="200" />
 
-    <Text fx:id="text" styleClass="borrowhistory"/>
     <Label fx:id="messageLabel" alignment="CENTER" contentDisplay="CENTER"/>
     <HBox spacing="50" alignment="CENTER" fx:id="box">
-        <Button text="View Reviews" onAction="#viewBookReviews" focusTraversable="false"/>
+        <Button text="View Reviews" onAction="#viewBookReviews" fx:id="showBook" focusTraversable="false"/>
         <Button text="Back" onAction="#Reviews" focusTraversable="false"/>
     </HBox>
 

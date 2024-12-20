@@ -4,15 +4,16 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.control.TextArea?>
 
 <VBox styleClass="body" alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.library_catalog_system.Controller" stylesheets="@style.css">
 
     <Text text="Library Inventory" layoutX="50" layoutY="50" styleClass="welcome-text"/>
-    <Text fx:id="text" styleClass="inventory"/>
 
+    <TextArea fx:id="bookInventory" editable="false" wrapText="true" prefHeight="200" />
     <HBox fx:id="box" spacing="50" alignment="CENTER">
-        <Button focusTraversable="false" text="Show Library Inventory" onAction="#libraryInventory"/>
+        <Button focusTraversable="false" fx:id="showBook" text="Show Library Inventory" onAction="#libraryInventory"/>
         <Button focusTraversable="false" text="Back" onAction="#backToAdmin"/>
     </HBox>
 
