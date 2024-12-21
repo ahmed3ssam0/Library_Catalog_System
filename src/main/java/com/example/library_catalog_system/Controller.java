@@ -65,8 +65,8 @@
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setScene(scene);
             stage.setTitle("Library Catalog System");
-            stage.setWidth(stage.getWidth());
-            stage.setHeight(stage.getHeight());
+            stage.setWidth(stage.getWidth()-1);
+            stage.setHeight(stage.getHeight()-1);
             stage.show();
         }
 
@@ -503,7 +503,7 @@
             library.loadBooksFromFile();
             List<Book> books = library.getBooks();
             for (Book book : books) {
-                bookView.appendText(book.getTitle() + " - Available copies: " + book.numOfCopies);
+                bookView.appendText(book.getTitle() + " - Available copies: " + book.numOfCopies+"\n");
             }
             showBook.setVisible(false);
         }

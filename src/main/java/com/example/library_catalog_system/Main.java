@@ -18,8 +18,8 @@ public class Main extends Application {
 
         stage.setScene(scene);
         stage.setTitle("Night Library");
-        stage.setWidth(stage.getWidth());
-        stage.setHeight(stage.getHeight());
+        stage.setWidth(1545);
+        stage.setHeight(830);
         stage.show();
     }
     public static void main(String[] args) {

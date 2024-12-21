@@ -31,7 +31,7 @@ public class CartBook {
 
 
     public String toString() {
-        return "Book---> "+"Book id :"+ book.getBookId() +",Book title :"+ book.getTitle() + ", Quantity: " + quantity + ", Total Price:" + (quantity * book.getPrice())+"$";
+        return "Book---> "+"Book id :"+ book.getBookId() +",Book title :"+ book.getTitle() + ", Quantity: " + quantity + ", Total Price:" + (quantity * book.getPrice())+"$"+"\n";
     }
 
 
