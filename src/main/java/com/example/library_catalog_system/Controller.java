@@ -227,18 +227,28 @@ public class Controller {
         List<Book> results = library.Search_book(query);
 
         // Display results
-        if (results.size() == 1 && results.getFirst().getNumOfCopies() > 0) {
-            Book book = results.getFirst();
-            searchResultsArea.setText("Found Book:\n" +
-                    "Title: " + book.getTitle() + "\n" +
-                    "Author: " + book.getAuthor().getName() + "\n" +
-                    "Price: $" + book.getPrice() + "\n" +
-                    "Year: " + book.getPublicationYear() + "\n" +
-                    "Available Copies: " + book.getNumOfCopies());
-        } else {
+        for (Book book : results) {
+            if (book.numOfCopies > 0) {
+                searchResultsArea.setText("Found Book:\n" +
+                        "Title: " + book.getTitle() + "\n" +
+                        "Author: " + book.getAuthor().getName() + "\n" +
+                        "Price: $" + book.getPrice() + "\n" +
+                        "Year: " + book.getPublicationYear() + "\n" +
+                        "Available Copies: " + book.getNumOfCopies());
+            } else {
+                searchResultsArea.setText("Found Book:\n" +
+                        "Title: " + book.getTitle() + "\n" +
+                        "Author: " + book.getAuthor().getName() + "\n" +
+                        "Price: $" + book.getPrice() + "\n" +
+                        "Year: " + book.getPublicationYear() + "\n" +
+                        "Not available for now");
+            }
+        }
+
+        if (results.isEmpty()) {
             StringBuilder recommendations = new StringBuilder("The book is not available. Here are some recommendations:\n");
-            for (Book book : results) {
-                recommendations.append("- ").append(book.getTitle()).append(" by ").append(book.getAuthor().getName()).append("\n");
+            for (Book book : library.Recommend_books()) {
+                recommendations.append("- ").append(book.getTitle()).append(" by ").append(book.getAuthor().getName()).append(" ").append(book.getAuthor().getSurname()).append("\n");
             }
             searchResultsArea.setText(recommendations.toString());
         }
@@ -286,10 +296,10 @@ public class Controller {
             messageLabel.setText("Phone number must contain only digits");
             return;
         }
-        int bookpages = Integer.parseInt(pages);
+        int bookpages = parseInt(pages);
         float bookprice = Float.parseFloat(price);
-        int bookyear = Integer.parseInt(year);
-        int bookcopies = Integer.parseInt(copies);
+        int bookyear = parseInt(year);
+        int bookcopies = parseInt(copies);
         Author author = new Author(authorname, authorsurname, authorphone, authoremail);
         Book book = new Book(booktitle, bookpages, bookcopies, bookprice, bookyear, author);
         library.addbook(book);
@@ -314,7 +324,7 @@ public class Controller {
             return;
         }
         if (copies.isBlank()) {
-            int bookId = Integer.parseInt(Id);
+            int bookId = parseInt(Id);
             float bookprice = Float.parseFloat(price);
             library.updatebooks(bookId, bookprice);
             alert.setTitle("Update Book");
@@ -323,8 +333,8 @@ public class Controller {
             adminBooks(actionEvent);
         }
         if (price.isBlank()) {
-            int bookId = Integer.parseInt(Id);
-            int bookcopies = Integer.parseInt(copies);
+            int bookId = parseInt(Id);
+            int bookcopies = parseInt(copies);
             library.updatebooks(bookId, bookcopies);
             alert.setTitle("Update Book");
             alert.setContentText("Book updated successfully");
@@ -332,9 +342,9 @@ public class Controller {
             adminBooks(actionEvent);
         }
         if (!Id.isBlank() && !copies.isBlank() && !price.isBlank()) {
-            int bookId = Integer.parseInt(Id);
+            int bookId = parseInt(Id);
             float bookprice = Float.parseFloat(price);
-            int bookcopies = Integer.parseInt(copies);
+            int bookcopies = parseInt(copies);
             library.updatebooks(bookId, bookprice, bookcopies);
             alert.setTitle("Update Book");
             alert.setContentText("Book updated successfully");
@@ -460,8 +470,8 @@ public class Controller {
             return;
         }
 
-        int id = Integer.parseInt(borrowerId);
-        int days = Integer.parseInt(borrowDays);
+        int id = parseInt(borrowerId);
+        int days = parseInt(borrowDays);
         for (Borrower borrower : Library.getBorrowers()) {
             if (id == borrower.getBorrowerId()) {
                 for (Book book : Library.getBooks()) {
@@ -536,7 +546,7 @@ public class Controller {
             return;
         }
 
-        int quantity = Integer.parseInt(bookQun);
+        int quantity = parseInt(bookQun);
         for (Book book : Library.getBooks()) {
             if (book.getTitle().equals(title)) {
                 cart.addItems(book, quantity);
@@ -636,7 +646,7 @@ public class Controller {
         for (Customer customer : Library.getCustomers()) {
             if (customer.getUsername().equals(username) && customer.getPassword().equals(password)) {
                 messageLabel.setText("");
-                int days = Integer.parseInt(borrowDays);
+                int days = parseInt(borrowDays);
                 for (Book book : Library.getBooks()) {
                     if (book.getTitle().equals(bookTitle)) {
                         library.customerBorrowBook(customer, bookTitle, days);
@@ -666,7 +676,7 @@ public class Controller {
             return;
         }
 
-        int rating = Integer.parseInt(ratingText);
+        int rating = parseInt(ratingText);
 
         if (rating < 1 || rating > 5) {
             messageLabel.setText("Rating must be between 1 and 5.");

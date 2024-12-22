@@ -2,7 +2,6 @@ package com.example.library_catalog_system;
 
 import java.util.*;
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.List;
 
 public class Library {
@@ -105,33 +104,40 @@ public class Library {
         System.out.println("Customer " + newCustomer.getCustomerId() +  " registered successfully.");
     }
     //---------------------------------------------------------------
-    //Function Recommend 3 Books If The  chosen book is not available
-    public List<Book> Recommend_books() {
-        ArrayList<Book> A = new ArrayList<>();
-        for (int i = 2; i < 5; i++) {
-            A.add(books.get(i));
+
+    //Function returns a list of random objects from another list
+    public static <T> List<T> getRandomElements(List<T> list, int count) {
+        if (count > list.size()) {
+            throw new IllegalArgumentException("Count cannot be greater than the size of the list.");
         }
-        Collections.shuffle(A);
-        return A;
+
+        // Create a copy of the list to avoid modifying the original
+        List<T> copy = new ArrayList<>(list);
+
+        // Shuffle the copy
+        Collections.shuffle(copy);
+
+        // Return the first 'count' elements
+        return copy.subList(0, count);
+    }
+
+    //Function recommend the half total books if the chosen book is not available
+    public List<Book> Recommend_books() {
+        int num;
+        if (Library.books.size() == 1) num = 1;
+        else num = Library.books.size() / 2;
+        return getRandomElements(Library.books, num);
     }
 
     //Function That Search for Specified Book By title or Author name and recommend some books if book not found
     public List<Book> Search_book(String Word) {
-        boolean found = false;
         List<Book> result = new ArrayList<>();
         for (Book book : books) {
             if ((book.getTitle().equalsIgnoreCase(Word)||book.getAuthor().getName().equalsIgnoreCase(Word)) && book.getNumOfCopies() > 0) {
                 result.add(book);
-                found = true;
-
             }
         }
-        if (!found) {
-            System.out.println("the book You Looking for is not available now , Here are some books you might like :\n ");
-            return Recommend_books();
-        }
-        else
-            return result;
+        return result;
     }
 
 
