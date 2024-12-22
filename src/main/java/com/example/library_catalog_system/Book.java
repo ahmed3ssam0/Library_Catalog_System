@@ -9,7 +9,7 @@ public class Book {
     private static int nextBookId = 1;
     private int bookId;
     private final int numOfPages;
-    private static String title;
+    private String title = "";
     public float price;
     public int publicationYear, numOfCopies;
     private Author author;
@@ -30,14 +30,14 @@ public class Book {
         this.publicationYear = publicationYear;
         this.author = author;
         author.addBook(this);
-        this.reviews = new ArrayList<>();
-        this.ratings = new ArrayList<>();
+        reviews = new ArrayList<>();
+        ratings = new ArrayList<>();
     }
 
     public int getBookId() {
         return bookId;
     }
-    public static String getTitle() {
+    public String getTitle() {
         return title;
     }
     public void setNumOfCopies(int numOfCopies){

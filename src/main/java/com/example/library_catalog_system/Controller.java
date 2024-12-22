@@ -81,7 +81,7 @@ public class Controller {
         data.recordTransactionsToFile(1);
         data.recordTransactionsToFile(2);
         for (int i = 0; i < Book.getReviews().size(); i++)
-            data.writeReviewToFile(Book.getRatings().get(i), Book.getReviews().get(i), Book.getTitle());
+            data.writeReviewToFile(Book.getRatings().get(i), Book.getReviews().get(i), Library.books.get(i).getTitle());
     }
 
     private void switchScene(String fxmlFile, ActionEvent actionEvent) throws IOException {
@@ -117,13 +117,13 @@ public class Controller {
             scaleDown.setToY(1.0);
 
             // Add hover listeners
-            button.setOnMouseEntered(e -> {
+            button.setOnMouseEntered(_ -> {
                 scaleDown.stop();
                 scaleUp.playFromStart();
                 button.setStyle("-fx-background-color: #572710; -fx-text-fill: #fff;");
             });
 
-            button.setOnMouseExited(e -> {
+            button.setOnMouseExited(_ -> {
                 scaleUp.stop();
                 scaleDown.playFromStart();
                 button.setStyle("-fx-background-color: #fff; -fx-text-fill: #000;");
@@ -508,7 +508,7 @@ public class Controller {
             return;
         }
         for (int i = 0; i < Library.getBooks().size(); i++) {
-            bookInventory.appendText("Book: " + Book.getTitle() + " - Available Copies: " + Library.getBooks().get(i).numOfCopies + "\n");
+            bookInventory.appendText("Book: " + Library.books.get(i).getTitle() + " - Available Copies: " + Library.getBooks().get(i).numOfCopies + "\n");
         }
         showBook.setVisible(false);
     }
@@ -517,7 +517,7 @@ public class Controller {
     private void userBookView() {
         List<Book> books = Library.getBooks();
         for (Book book : books) {
-            bookView.appendText(Book.getTitle() + " - Available copies: " + book.numOfCopies);
+            bookView.appendText(book.getTitle() + " - Available copies: " + book.numOfCopies);
         }
         showBook.setVisible(false);
     }
@@ -538,7 +538,7 @@ public class Controller {
 
         int quantity = Integer.parseInt(bookQun);
         for (Book book : Library.getBooks()) {
-            if (Book.getTitle().equals(title)) {
+            if (book.getTitle().equals(title)) {
                 cart.addItems(book, quantity);
                 alert.setTitle("Add To Cart");
                 alert.setHeaderText("Book added successfully");
@@ -638,7 +638,7 @@ public class Controller {
                 messageLabel.setText("");
                 int days = Integer.parseInt(borrowDays);
                 for (Book book : Library.getBooks()) {
-                    if (Book.getTitle().equals(bookTitle)) {
+                    if (book.getTitle().equals(bookTitle)) {
                         library.customerBorrowBook(customer, bookTitle, days);
                         alert.setTitle("Borrow Book");
                         alert.setHeaderText("Book borrowed successfully");

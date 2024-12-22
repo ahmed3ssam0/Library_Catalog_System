@@ -3,9 +3,7 @@ package com.example.library_catalog_system;
 import java.util.*;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.io.*;
 import java.util.List;
-import java.time.LocalDate;
 
 public class Library {
 
@@ -65,7 +63,7 @@ public class Library {
     public void setBooks(Book book) {
         boolean found = false;
         for (int i = 0; i < Library.getBooks().size(); i++) {
-            if (Library.getBooks().get(i).getTitle().equals(book.getTitle()) && Library.getBooks().get(i).getAuthor().equals(book.getAuthor())) {
+            if (books.get(i).getTitle().equals(book.getTitle()) && Library.getBooks().get(i).getAuthor().equals(book.getAuthor())) {
                 found = true;
                 Library.getBooks().get(i).incrementCopies();
             }
@@ -230,21 +228,6 @@ public class Library {
     public void addBorrower(Borrower newborrower) {
         borrowers.add(newborrower);
         System.out.println("Borrower added! " + newborrower.getBorrowerId());
-    }
-
-    public void addBorrower() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter Borrower Name: ");
-        String name = scanner.nextLine();
-        System.out.print("Enter Borrower Address: ");
-        String address = scanner.nextLine();
-        System.out.print("Enter Borrower Phone Number: ");
-        String phone = scanner.nextLine();
-        System.out.print("Enter Borrower Email Address: ");
-        String email = scanner.nextLine();
-        // Create a new Borrower and add it to the list
-        Borrower borrower = new Borrower(name, address, phone, email);
-        borrowers.add(borrower);
     }
 
     public void customerBorrowBook(Customer customer, String borrowedBook, int days) {
