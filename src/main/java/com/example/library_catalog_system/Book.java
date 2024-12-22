@@ -9,12 +9,12 @@ public class Book {
     private static int nextBookId = 1;
     private int bookId;
     private final int numOfPages;
-    private String title;
+    private static String title;
     public float price;
     public int publicationYear, numOfCopies;
     private Author author;
-    private List<String> reviews;
-    private List<Integer> ratings;
+    private static List<String> reviews;
+    private static List<Integer> ratings;
 
 
     public Book(String title, int numOfPages, int numOfCopies, float price, int publicationYear, Author author) {
@@ -37,7 +37,7 @@ public class Book {
     public int getBookId() {
         return bookId;
     }
-    public String getTitle() {
+    public static String getTitle() {
         return title;
     }
     public void setNumOfCopies(int numOfCopies){
@@ -75,13 +75,25 @@ public class Book {
         }
         this.publicationYear = publicationYear;
     }
-    public List<String> getReviews() {
+    public static List<String> getReviews() {
         return reviews;
     }
+
+    public static void setReviews(List<String> reviews) {
+        Book.reviews = reviews;
+    }
+
+    public static void setRatings(List<Integer> ratings) {
+        Book.ratings = ratings;
+    }
+
+    public static List<Integer> getRatings() {
+        return ratings;
+    }
+
     public void addReview(String review, int rating) {
-        this.reviews.add(review);
-        this.ratings.add(rating);
-        writeReviewToFile(rating, review);
+        reviews.add(review);
+        ratings.add(rating);
     }
     public double getAverageRating() {
         if (ratings.isEmpty()) return 0.0;
@@ -157,32 +169,6 @@ public class Book {
 
     public void setnumofcopies(int numOfCopies){
         this.numOfCopies=numOfCopies;
-    }
-
-    private void writeReviewToFile(int rate, String review) {
-        String filePath = "E:\\ahmed\\java\\Library_Catalog_System\\Library_Catalog_System\\files\\Books_reviews\\" + title + "_Reviews.txt";
-        try (PrintWriter writer = new PrintWriter(new FileWriter(filePath, true))) {
-            writer.println("Rating: " + rate+" , Review: " + review);
-            writer.println();
-        } catch (IOException e) {
-            throw new RuntimeException("Error writing review to file: " + filePath, e);
-        }
-    }
-
-    public List<String> showAllRatingsAndReviews() {
-        String filePath = "E:\\ahmed\\java\\Library_Catalog_System\\Library_Catalog_System\\files\\Books_reviews\\" + title + "_Reviews.txt";
-        List<String> data = new ArrayList<>();
-        File writer=new File(filePath);
-        try(Scanner scan=new Scanner(writer)){
-            while(scan.hasNextLine()) {
-                data.add(scan.nextLine());
-            }
-            return data;
-        }
-        catch (FileNotFoundException e){
-            System.out.println("Error while Reading from file");
-        }
-        return null;
     }
 }
 

@@ -28,12 +28,6 @@ public class Customer extends User{
     public void setCustomerId(int customerId) {
         this.customerId = customerId;
     }
-    public static void setNextCustomerId(int Id) {
-        nextCustomerId = Id;
-    }
-    public static int getNextCustomerId() {
-        return nextCustomerId;
-    }
     public String getUsername() {
         return username;
     }

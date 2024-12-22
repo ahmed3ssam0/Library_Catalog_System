@@ -9,7 +9,7 @@
 
     <Text text="Cart" layoutX="50" layoutY="50" styleClass="welcome-text"/>
 
-    <TextArea fx:id="Cart" editable="false"/>
+    <TextArea fx:id="cartText" editable="false"/>
 
     <Label fx:id="messageLabel" alignment="CENTER" contentDisplay="CENTER"/>
 

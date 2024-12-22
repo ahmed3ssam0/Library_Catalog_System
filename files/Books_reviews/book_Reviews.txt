@@ -1,10 +1,2 @@
-Rating: 3 , Review: fdfsf
-
-Rating: 3 , Review: Beautifull
-
-Rating: 2 , Review: hj
-
-Rating: 3 , Review: dgfgdgd
-
-Rating: 3 , Review: jkdsf
-
+5,good
+5,good

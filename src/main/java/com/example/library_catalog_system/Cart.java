@@ -6,14 +6,20 @@ import java.util.List;
 import java.util.Scanner;
 import static com.example.library_catalog_system.Library.books;
 public class Cart {
-
-        private final String filename = "E:\\ahmed\\java\\Library_Catalog_System\\Library_Catalog_System\\files\\CustomersCart\\";
-        public List<CartBook> Cbooks;
+        public static List<CartBook> Cbooks;
         public Cart () {
             Cbooks = new ArrayList<>();
         }
 
-        public void addItems(Book book, int quantity, Library mylibrary, String customerId) {
+    public static void setCbooks(List<CartBook> cbooks) {
+        Cbooks = cbooks;
+    }
+
+    public static List<CartBook> getCbooks() {
+        return Cbooks;
+    }
+
+    public void addItems(Book book, int quantity) {
             try {
                 // Check availability of copies
                 if (quantity > book.getNumOfCopies()) {
@@ -33,8 +39,6 @@ public class Cart {
                 Cbooks.add(new CartBook(book, quantity));
                 book.setnumofcopies(book.getNumOfCopies() - quantity);
                 System.out.println("Book added to the cart successfully!");
-                save_booksInCart_to_file(customerId);
-                mylibrary.save_books_to_file();
             } catch (IllegalArgumentException e) {
                 System.out.println("Error: " + e.getMessage());
             } catch (Exception e) {
@@ -42,21 +46,19 @@ public class Cart {
             }
         }
 
-        public void deleteItem(int bookId, Library mylibrary, String customerId) {
+        public void deleteItem(int bookId) {
             for (CartBook cartbook : Cbooks) {
                 if (cartbook.getBook().getBookId() == bookId) {
                     cartbook.getBook().setnumofcopies(cartbook.getBook().getNumOfCopies() + cartbook.getQuantity());
                     Cbooks.remove(cartbook);
                     System.out.println("All copies of the item removed from cart.");
-                    save_booksInCart_to_file(customerId);
-                    mylibrary.save_books_to_file();
                     return;
                 }
             }
             System.out.println("Book not found in cart.");
         }
 
-        public void updateItemQuantity(int bookId, int quantity, Library mylibrary, String customerId) {
+        public void updateItemQuantity(int bookId, int quantity) {
             for (CartBook cartbook : Cbooks) {
                 if (cartbook.getBook().getBookId() == bookId) {
                     int currentCartQuantity = cartbook.getQuantity();
@@ -85,63 +87,10 @@ public class Cart {
                         cartbook.setQuantity(quantity);
                         System.out.println("Cart updated. Removed " + reducedQuantity + " copies.");
                     }
-                    save_booksInCart_to_file(customerId);
-                    mylibrary.save_books_to_file();
                     return;
                 }
             }
             System.out.println("Book not found in the cart.");
-        }
-
-
-
-        public void save_booksInCart_to_file(String customerId) {
-            try (FileWriter writer = new FileWriter(filename + customerId + "_cart.txt"))
-            {
-                for (CartBook cbook : Cbooks)
-                {
-                    writer.write(cbook.ToFileFormat() + "\n");
-                }
-                System.out.println("Cart saved successfully to file!");
-            } catch (IOException e)
-            {
-                System.out.println("Error saving books to file: " + e.getMessage());
-            }
-        }
-
-        public void LoadBooksFromFile(String customerId) {
-            Cbooks.clear();
-            File file = new File(filename + customerId + "_cart.txt");
-            if (!file.exists()) {
-                try {
-                    file.getParentFile().mkdirs();
-                    file.createNewFile();
-                    System.out.println("File created: " + filename + customerId + "_cart.txt");
-                } catch (IOException e) {
-                    System.out.println("Error creating file: " + e.getMessage());
-                    return;
-                }
-            }
-            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    CartBook cbook = CartBook.fromFileFormat(line);
-                    Cbooks.add(cbook);
-                }
-                System.out.println("Cart loaded successfully from file!");
-            } catch (IOException e) {
-                System.out.println("Error loading books from file: " + e.getMessage());
-            }
-
-
-        }
-
-        public void clearFile(String customerId) {
-            try (FileWriter _ = new FileWriter(filename  + customerId + "_cart.txt", false)) {
-                System.out.println("File cleared successfully.");
-            } catch (IOException e) {
-                System.out.println("An error occurred while clearing the file: " + e.getMessage());
-            }
         }
 }
 

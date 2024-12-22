@@ -12,6 +12,7 @@ import java.util.Objects;
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
+        Controller.loadAll();
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("home.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
@@ -22,6 +23,11 @@ public class Main extends Application {
         stage.setHeight(stage.getHeight());
         stage.show();
     }
+    @Override
+    public void stop() {
+        Controller.saveAll();
+    }
+
     public static void main(String[] args) {
         launch();
     }

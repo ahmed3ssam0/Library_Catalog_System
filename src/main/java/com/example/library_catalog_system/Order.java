@@ -1,15 +1,21 @@
 package com.example.library_catalog_system;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Order {
-    private final String filename = "E:\\ahmed\\java\\Library_Catalog_System\\Library_Catalog_System\\files\\CustomersBuyings\\";
-    public List<CartBook> orderBooks;
+    public static List<CartBook> orderBooks;
 
     public Order() {
         orderBooks = new ArrayList<>();
+    }
+
+    public static void setOrderBooks(List<CartBook> orders) {
+        Order.orderBooks = orders;
+    }
+
+    public static List<CartBook> getOrderBooks() {
+        return orderBooks;
     }
 
     public String totalPrice() {
@@ -18,47 +24,6 @@ public class Order {
             totalPrice += order.getBook().price * order.getQuantity();
         }
         return String.format("%.2f", totalPrice);
-    }
-
-    public void saveBooksInOrder(String customerId) {
-        try (FileWriter writer = new FileWriter(filename + customerId + "_buying.txt"))
-        {
-            for (CartBook order : orderBooks)
-            {
-                writer.write(order.ToFileFormat() + "\n");
-            }
-            System.out.println("Orders saved successfully to file!");
-        } catch (IOException e)
-        {
-            System.out.println("Error saving orders to file: " + e.getMessage());
-        }
-    }
-
-    public void loadOrdersFromFile(String customerId) {
-        orderBooks.clear();
-        File file = new File(filename + customerId + "_buying.txt");
-        if (!file.exists()) {
-            try {
-                file.getParentFile().mkdirs();
-                file.createNewFile();
-                System.out.println("File created: " + filename + customerId + "_buying.txt");
-            } catch (IOException e) {
-                System.out.println("Error creating file: " + e.getMessage());
-                return;
-            }
-        }
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                CartBook order = CartBook.fromFileFormat(line);
-                orderBooks.add(order);
-            }
-            System.out.println("Orders loaded successfully from file!");
-        } catch (IOException e) {
-            System.out.println("Error loading orders from file: " + e.getMessage());
-        }
-
-
     }
 
 }

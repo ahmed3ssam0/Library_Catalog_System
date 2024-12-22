@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
-
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
 <VBox styleClass="user" alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.library_catalog_system.Controller" stylesheets="@style.css">
 
     <Text text="Buy Book" layoutX="50" layoutY="50" styleClass="welcome-text"/>
-    <TextField fx:id="customerUsername" promptText="Your Username"/>
-    <PasswordField fx:id="customerPassword" promptText="Your Password"/>
     <TextField fx:id="customerBookTitle" promptText="Book Title"/>
     <TextField fx:id="customerBookQuantity" promptText="Quantity"/>
 

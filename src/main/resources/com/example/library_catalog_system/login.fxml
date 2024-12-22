@@ -20,6 +20,7 @@
 
     <HBox fx:id="box" spacing="50" alignment="CENTER">
         <Button focusTraversable="false" text="Login" onAction="#handleLogin"/>
+        <Button focusTraversable="false" text="Back" onAction="#backToHome"/>
     </HBox>
 
 </VBox>

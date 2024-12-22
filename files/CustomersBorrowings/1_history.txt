@@ -1,1 +1,0 @@
-Transaction{book=book, borrowDate=2024-12-19, returnDate=2024-12-20}

@@ -1,8 +1,2 @@
-1,a,a,1,@.,a,123456789
-2,a,a,1,@.,aa,123456789
-3,a,a,1,@.,ahmed,123456789
-4,dfdf,dsf,34,@.,aaaaaa,66666666
-33,as,as,435543,@.,ahmed2,00000000
-6,g,g,4,@.,abc,123456789
-7,d,d,4,@.,ssssss,66666666
-8,a,a,2,@.,aaaaa,22222222
+1,ahmed,cairo,01221292988,ahmed@email.com,ahmed,123456789
+2,nothing,space,546544651654165,space@s.com,nothing,123456789
