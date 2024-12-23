@@ -80,8 +80,10 @@ public class Controller {
         data.writeBorrowerTransactionToFile(Library.getBorrowers());
         data.recordTransactionsToFile(1);
         data.recordTransactionsToFile(2);
-        for (int i = 0; i < Book.getReviews().size(); i++)
-            data.writeReviewToFile(Book.getRatings().get(i), Book.getReviews().get(i), Library.books.get(i).getTitle());
+        for(Book book:library.books) {
+            for (int i = 0; i < book.getReviews().size(); i++)
+                data.writeReviewToFile(book.getRatings().get(i), book.getReviews().get(i), book.getTitle());
+        }
     }
 
     private void switchScene(String fxmlFile, ActionEvent actionEvent) throws IOException {

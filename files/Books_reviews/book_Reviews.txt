@@ -1,2 +1,6 @@
 5,good
 5,good
+3,good
+3,good
+3,high cost
+4,High Cost
