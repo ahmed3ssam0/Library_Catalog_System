@@ -95,10 +95,6 @@ public class Book {
         reviews.add(review);
         ratings.add(rating);
     }
-    public double getAverageRating() {
-        if (ratings.isEmpty()) return 0.0;
-        return ratings.stream().mapToInt(r -> r).average().orElse(0.0);
-    }
 
     public int getNumOfPages() {
         return numOfPages;

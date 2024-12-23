@@ -92,6 +92,8 @@ public class Controller {
 
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.setScene(scene);
+        stage.setWidth(stage.getWidth()+0.1);
+        stage.setHeight(stage.getHeight()+0.1);
         stage.setTitle("Night Library");
         stage.show();
     }
@@ -527,7 +529,7 @@ public class Controller {
     private void userBookView() {
         List<Book> books = Library.getBooks();
         for (Book book : books) {
-            bookView.appendText(book.getTitle() + " - Available copies: " + book.numOfCopies);
+            bookView.appendText(book.getTitle() + " - Available copies: " + book.numOfCopies+"\n");
         }
         showBook.setVisible(false);
     }
