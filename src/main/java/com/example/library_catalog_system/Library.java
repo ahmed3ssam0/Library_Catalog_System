@@ -242,7 +242,6 @@ public class Library {
                 if (book.getNumOfCopies() > 0) {
                     Transaction transaction = new Transaction(book, customer, days);
                     customer.getTransactions().add(transaction); // Add to Borrower's list of transactions
-                    book.decrementCopies();
                     All_Transaction.add(transaction);
                     System.out.println("Transaction successful! " + transaction);  // Prints the transaction details
                     return;  // Exit the method once the book is successfully borrowed
